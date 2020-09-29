@@ -12,7 +12,8 @@ public class Link {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
-    @Column(name = "original")
+    @Column(name = "original",
+            columnDefinition = "NVARCHAR(MAX)")
     private String originalName;
     @Column(name = "n")
     private String newName;
