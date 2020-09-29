@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:action="@{/}" th:object="${link}" method="post">
+    <p>Type link to shorten</p>
+    <label>
+        <input type="text" th:field="*{originalName}"/>
+    </label>
+
+    <button type="submit" value="SHORT!!!">Get short link</button>
+
+
+    <div th:if="${mess}" >
+         <p class="alert_text" th:text="${mess}" ></p>
+    </div>
+</form>
+</body>
+</html>
