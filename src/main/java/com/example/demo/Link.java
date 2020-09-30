@@ -15,11 +15,13 @@ public class Link {
     @Column(name = "original",
             columnDefinition = "NVARCHAR(MAX)")
     private String originalName;
-    @Column(name = "n")
+    @Column(name = "new_name")
     private String newName;
+    @Column(name = "delete_key")
+    private String deleteKey;
+    @Column(name = "counter")
+    private int counter;
 
-    public Link(){
-
+    public Link() {
     }
-
 }
