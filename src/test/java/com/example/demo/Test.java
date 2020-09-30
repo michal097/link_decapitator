@@ -1,11 +1,21 @@
 package com.example.demo;
 
-import java.util.UUID;
 
 public class Test {
-    public static void main(String [] args){
-        String str = UUID.randomUUID().toString();
-        System.out.println(str.length());
-        System.out.println(str.substring(30));
+    public static void main(String[] args) {
+
+
+        Thread th = new Thread(() -> {
+            System.out.println("start");
+            for (int i = 0; i < 5; i++) {
+                System.out.println("elko");
+            }
+            System.out.println("end");
+        });
+        th.start();
+        for(int i=0;i<5;i++){
+            System.out.println("inne elko");
+        }
+
     }
 }

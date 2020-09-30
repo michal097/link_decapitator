@@ -36,9 +36,15 @@ public class LinkController {
         link.setNewName(uniqueString.substring(0,6));
         link.setDeleteKey(uniqueString.substring(28));
 
-        linkRepo.save(link);
-        redirectAttributes.addFlashAttribute("mess","Short link: localhost:9999/" + link.getNewName() + '\n'+
-                                                "your delete key is: " + link.getDeleteKey());
+        if(link.getOriginalName().trim().equals("http://")){
+            redirectAttributes.addFlashAttribute("mess","ENTER SOME URL!!!");
+            return "redirect:/";
+        }
+        else {
+            linkRepo.save(link);
+            redirectAttributes.addFlashAttribute("mess", "Short link: home/" + link.getNewName() + '\n' +
+                    "your delete key is: " + link.getDeleteKey());
+        }
         return "redirect:/";
     }
 
