@@ -20,8 +20,11 @@ public class Link {
     @Column(name = "delete_key")
     private String deleteKey;
     @Column(name = "counter")
-    private int counter;
+    private Integer counter;
+    @Column(name = "ip")
+    private String ip;
 
     public Link() {
+        this.counter=0;
     }
 }
