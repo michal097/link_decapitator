@@ -13,5 +13,4 @@ public class DemoApplication {
         springApplication.setDefaultProperties(Collections.singletonMap("server.port","9999"));
         springApplication.run(args);
     }
-
 }

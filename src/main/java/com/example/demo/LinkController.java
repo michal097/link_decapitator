@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import lombok.Getter;
+import org.hibernate.validator.internal.constraintvalidators.hv.URLValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,10 +70,4 @@ public class LinkController {
             return redirectView;
     }
 
-    @GetMapping("/delete/{key}")
-    @Transactional
-    public String deleteThis(@PathVariable("key") String deleteKey){
-        linkRepo.deleteByDeleteKey(deleteKey);
-        return "redirect:/";
-    }
 }

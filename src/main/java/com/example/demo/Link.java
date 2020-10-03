@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.URL;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,7 +15,8 @@ public class Link {
     @Column(name = "id")
     private Long id;
     @Column(name = "original",
-            columnDefinition = "NVARCHAR(MAX)")
+            columnDefinition = "TEXT")
+    @URL
     private String originalName;
     @Column(name = "new_name")
     private String newName;

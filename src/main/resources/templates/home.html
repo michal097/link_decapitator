@@ -2,120 +2,70 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" th:href=@{/static/style.css} type="text/css">
-    <script src="../static/copy.js"></script>
+    <title>Link decapitator</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/angularController.js}"></script>
+    <script type="text/javascript" th:src="@{/js/copy.js}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="../static/js/angularController.js"
+            th:src="@{/js/angularController.js}"></script>
 
 </head>
-<body>
-<style>
-    body{
-        background-color: white;
-    }
 
-    .linkInput input[type=text]{
-        width: 100%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        box-sizing: border-box;
-        border: 3px solid #ccc;
-        -webkit-transition: 0.5s;
-        transition: 0.5s;
-        outline: none;
-    }
-    input[type=text]:focus {
-        border: 3px solid #4CAF50;
-    }
-    h1 {
-        text-align: center;
-    }
 
-    .result input[type=text]{
-        border-radius:10px;
-        display: inline-block;
-        height: 30px;
-        width: 200px;
-        margin-top: ;
-
-    }
-    .button{
-        width: 60%;
-        margin-left: 20%;
-        margin-right: 20%;
-        background-color: #4CAF50;
-        border: none;
-        color: white;
-        padding: 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 10px;
-    }
-
-    .copy_button{
-        margin-top:;
-        background-color: #482060;
-        border: none;
-        color: white;
-        text-align: center;
-        text-decoration: none;
-        font-size: 16px;
-        cursor: pointer;
-        height:30px;
-        border-radius: 10px;
-    }
-    .copy_button:hover{
-        background-color: #884bae;
-    }
-    .button:hover{
-        background-color: green;
-    }
-    .result{
-        margin-top: 30px;
-        text-align: center;
-    }
-
-</style>
+<body ng-app="app" >
 
 <form th:action="@{/save}" th:object="${link}" method="post">
-    <h1>
-        Enter the URL to shorten
-    </h1>
+    <h1> Enter the URL to shorten</h1>
     <div class="linkInput">
-
-        <label>
-            <input type="text" th:field="*{originalName}"/>
-        </label>
-
+     <input type="text" placeholder="enter some url adress" style="color: dimgrey; font-size: 20px;" th:field="*{originalName}"/>
     </div>
-
     <button class="button" type="submit" value="SHORT!!!">Get short link</button>
-
 </form>
-
-
-
-<script>
-    function myFunction() {
-        var copyText = document.getElementById("myInput");
-        copyText.select();
-        copyText.setSelectionRange(0, 99999)
-        document.execCommand("copy");
-        alert("Copied the text: " + copyText.value);
-    }
-</script>
 
 <div class="result" th:if="${mess}" >
     <p>Your short link:
         <input type="text" th:value="${mess}" id="myInput" readonly>
         <button class="copy_button"onclick="myFunction()">Copy text</button>
     </p>
+  </div>
 
+<div class="content" ng-controller="UserCRUDCtrl">
 
+    <button class="button_del" ng-click="showDelete = ! showDelete">Delete link</button>
 
+    <div ng-show = "showDelete">
+
+        <p>
+            <label for="id">
+            </label><input class="delete_input" type="text" placeholder="Enter delete key" style="color: dimgrey" id="id" ng-model="link.deleteKey" />
+            <button class="button_delete" ng-click="deleteUser(link.deleteKey)"> Delete chosen link</button>
+
+    </div>
+    <button class="button_get_all" ng-click="getAllLinks();showDetails = ! showDetails">Get all links</button><br/><br/>
+    <div ng-show="showDetails">
+            <table>
+            <thead>
+            <tr>
+                <th>Original URL</th>
+                <th>New URL</th>
+                <th>Number of visits</th>
+                <th>Delete key</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="link in links">
+                <td>{{link.originalName}}</td>
+                <td>localhost:9090/{{link.newName}}</td>
+                <td>{{link.counter}}</td>
+                <td>{{link.deleteKey}}</td>
+            </tr>
+            </tbody>
+        </table>
 
 </div>
+</div>
+
 </body>
 </html>
