@@ -30,7 +30,7 @@ public class LinkController {
         return "home";
 
     }
-    @PostMapping("/")
+    @PostMapping("/save")
     public String saveAndMakeMagic(@ModelAttribute Link link, RedirectAttributes redirectAttributes){
         String uniqueString = UUID.randomUUID().toString().replaceAll("-","");
         String validatorHTTPS = link.getOriginalName().startsWith("http")?link.getOriginalName():"http://" + link.getOriginalName();
@@ -46,8 +46,7 @@ public class LinkController {
         }
         else {
             linkRepo.save(link);
-            redirectAttributes.addFlashAttribute("mess", "Short link: home/" + link.getNewName() + '\n' +
-                    "your delete key is: " + link.getDeleteKey());
+            redirectAttributes.addFlashAttribute("mess", "localhost:9999/"+link.getNewName());
         }
         return "redirect:/";
     }
