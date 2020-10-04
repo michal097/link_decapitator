@@ -16,11 +16,10 @@ public class Link {
     private Long id;
     @Column(name = "original",
             columnDefinition = "TEXT")
-    @URL
     private String originalName;
     @Column(name = "new_name")
     private String newName;
-    @Column(name = "delete_key")
+    @Column(name = "delete_key", unique = true)
     private String deleteKey;
     @Column(name = "counter")
     private Integer counter;

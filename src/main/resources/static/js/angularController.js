@@ -1,4 +1,4 @@
-var app = angular.module('app',[]);
+var app = angular.module('app',['ngMessages']);
 app.service('UserCRUDService', [ '$http', function($http) {
 
     this.getAllLinks = function getAllLinks() {
@@ -18,19 +18,22 @@ app.service('UserCRUDService', [ '$http', function($http) {
 app.controller('UserCRUDCtrl', ['$scope','UserCRUDService',
     function ($scope,UserCRUDService, $http) {
 
+    $scope.submitted= false;
 
 
         $scope.deleteUser = function () {
             UserCRUDService.deleteUser($scope.link)
-                .then (function success(response){
-                        $scope.message = 'Link has been successfully deleted!';
-                        $scope.errorMessage='Wrong delete key';
-                    },
-                    function error(response){
-                        $scope.errorMessage = 'Wrong delete key';
-                        $scope.message='Wrong delete key';
+                .then (function error(response){
+                    if(response.status===409){
+                        $scope.errorMessage = response.data.message;
+                    }else
+                    {
+                        $scope.errorMessage = 'Invalid delete key';
+                    }
+                    $scope.message = 'as';
 
                     })
+            $scope.getAllLinks();
         }
 
 
@@ -49,5 +52,7 @@ app.controller('UserCRUDCtrl', ['$scope','UserCRUDService',
                         $scope.errorMessage = 'Error getting users!';
                     });
         }
+
+        $scope.getAllLinks();
 
     }]);

@@ -1,9 +1,12 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -33,7 +36,17 @@ public class ListRestController {
 
     @DeleteMapping("delete/{deleteKey}")
     @Transactional
-    public void deleteLink(@PathVariable("deleteKey")String deleteKey){
-        linkRepo.deleteByDeleteKey(deleteKey);
+    public ResponseEntity<Link> deleteLink(@PathVariable("deleteKey")String deleteKey, RedirectAttributes redirectAttributes){
+        boolean deleteKeyIsPresent = linkRepo.findAll().stream().anyMatch(k->k.getDeleteKey().equals(deleteKey));
+        System.out.println(deleteKeyIsPresent);
+        if(deleteKeyIsPresent) {
+            linkRepo.deleteByDeleteKey(deleteKey);
+            redirectAttributes.addFlashAttribute("delErr", "Link has been deleted");
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else {
+            redirectAttributes.addFlashAttribute("delErr", "Invalid delete key");
+        }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 }

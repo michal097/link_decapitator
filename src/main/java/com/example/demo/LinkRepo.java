@@ -19,7 +19,7 @@ public interface LinkRepo extends CrudRepository<Link, Long> {
     @Query("update Link l set l.counter = l.counter+1 where l.id = :id")
     void increase(@Param("id") Long id);
     List<Link> findAllByIp(String ip);
-
+    List<Link> findAll();
 
     void deleteByDeleteKey(String deleteKey);
 

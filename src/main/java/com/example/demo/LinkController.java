@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import lombok.Getter;
-import org.hibernate.validator.internal.constraintvalidators.hv.URLValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,21 +32,28 @@ public class LinkController {
     }
     @PostMapping("/save")
     public String saveAndMakeMagic(@ModelAttribute Link link, RedirectAttributes redirectAttributes){
+
         String uniqueString = UUID.randomUUID().toString().replaceAll("-","");
         String validatorHTTPS = link.getOriginalName().startsWith("http")?link.getOriginalName():"http://" + link.getOriginalName();
-        link.setOriginalName(validatorHTTPS);
-        link.setNewName(uniqueString.substring(0,6));
+        link.setOriginalName(validatorHTTPS.toLowerCase().trim());
+        link.setNewName("s91.herokuapp.com/"+uniqueString.substring(0,6));
         link.setDeleteKey(uniqueString.substring(28));
         String remoteAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
                 link.setIp(remoteAddress);
 
+
         if(link.getOriginalName().trim().equals("http://")){
-            redirectAttributes.addFlashAttribute("mess","ENTER SOME URL!!!");
+            redirectAttributes.addFlashAttribute("err","ENTER SOME URL!!!");
             return "redirect:/";
         }
+        else if(!LinkValidator.checkValid(link.getOriginalName())){
+            redirectAttributes.addFlashAttribute("err", "Entered URL is invalid");
+            return "redirect:/";
+        }
+
         else {
             linkRepo.save(link);
-            redirectAttributes.addFlashAttribute("mess", "localhost:9999/"+link.getNewName());
+            redirectAttributes.addFlashAttribute("mess", link.getNewName());
         }
         return "redirect:/";
     }
