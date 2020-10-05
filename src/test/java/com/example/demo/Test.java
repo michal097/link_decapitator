@@ -1,22 +1,20 @@
 package com.example.demo;
 
+import java.util.stream.Collectors;
 
 public class Test {
+
+    public static String randomlyChangeCase(String str){
+
+        return str.chars()
+                .mapToObj(c -> (char) c)
+                .map(c->c>97&&c%2==0?Character
+                        .toUpperCase(c):Character.toLowerCase(c))
+                .map(Object::toString)
+                .collect(Collectors.joining());
+    }
+
     public static void main(String[] args) {
-
-
-
-        Thread th = new Thread(() -> {
-            System.out.println("start");
-            for (int i = 0; i < 5; i++) {
-                System.out.println("elko");
-            }
-            System.out.println("end");
-        });
-        th.start();
-        for(int i=0;i<5;i++){
-            System.out.println("inne elko");
-        }
-
+        System.out.println(randomlyChangeCase("abcp"));
     }
 }

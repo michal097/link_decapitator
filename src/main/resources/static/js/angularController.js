@@ -16,24 +16,25 @@ app.service('UserCRUDService', [ '$http', function($http) {
 }]);
 
 app.controller('UserCRUDCtrl', ['$scope','UserCRUDService',
-    function ($scope,UserCRUDService, $http) {
+    function ($scope,UserCRUDService, $http, $timeout) {
 
     $scope.submitted= false;
-
 
         $scope.deleteUser = function () {
             UserCRUDService.deleteUser($scope.link)
                 .then (function error(response){
                     if(response.status===409){
                         $scope.errorMessage = response.data.message;
+                        $scope.getAllLinks();
                     }else
                     {
+                        $scope.getAllLinks();
                         $scope.errorMessage = 'Invalid delete key';
                     }
                     $scope.message = 'as';
-
                     })
-            $scope.getAllLinks();
+
+
         }
 
 
@@ -51,8 +52,6 @@ app.controller('UserCRUDCtrl', ['$scope','UserCRUDService',
                         $scope.message='';
                         $scope.errorMessage = 'Error getting users!';
                     });
-        }
-
+        };
         $scope.getAllLinks();
-
     }]);

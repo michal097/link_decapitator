@@ -1,27 +1,25 @@
 package com.example.demo;
 
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import javax.transaction.Transactional;
 import java.util.Optional;
-import java.util.UUID;
+
 
 @Controller
 public class LinkController {
 
-    @Getter
     private final LinkRepo linkRepo;
+    private final LinkValidatorService linkValidatorService;
 
     @Autowired
-    LinkController(LinkRepo linkRepo){
+    LinkController(LinkRepo linkRepo, LinkValidatorService linkValidatorService){
         this.linkRepo=linkRepo;
+        this.linkValidatorService=linkValidatorService;
     }
 
     @GetMapping("/")
@@ -33,27 +31,20 @@ public class LinkController {
     @PostMapping("/save")
     public String saveAndMakeMagic(@ModelAttribute Link link, RedirectAttributes redirectAttributes){
 
-        String uniqueString = UUID.randomUUID().toString().replaceAll("-","");
-        String validatorHTTPS = link.getOriginalName().startsWith("http")?link.getOriginalName():"http://" + link.getOriginalName();
-        link.setOriginalName(validatorHTTPS.toLowerCase().trim());
-        link.setNewName("s91.herokuapp.com/"+uniqueString.substring(0,6));
-        link.setDeleteKey(uniqueString.substring(28));
-        String remoteAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
-                link.setIp(remoteAddress);
-
+        linkValidatorService.makeNewLink(link);
 
         if(link.getOriginalName().trim().equals("http://")){
             redirectAttributes.addFlashAttribute("err","ENTER SOME URL!!!");
             return "redirect:/";
         }
-        else if(!LinkValidator.checkValid(link.getOriginalName())){
+        else if(!linkValidatorService.checkValid(link.getOriginalName())){
             redirectAttributes.addFlashAttribute("err", "Entered URL is invalid");
             return "redirect:/";
         }
 
         else {
             linkRepo.save(link);
-            redirectAttributes.addFlashAttribute("mess", link.getNewName());
+            redirectAttributes.addFlashAttribute("mess", "s91.herokuapp.com/"+link.getNewName());
         }
         return "redirect:/";
     }
@@ -72,6 +63,7 @@ public class LinkController {
             }else {
                 url = "";
             }
+
             redirectView.setUrl(url);
             return redirectView;
     }

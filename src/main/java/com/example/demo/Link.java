@@ -8,8 +8,8 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name = "links")
-
 public class Link {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
