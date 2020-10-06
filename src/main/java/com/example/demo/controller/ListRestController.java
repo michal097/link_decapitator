@@ -36,7 +36,7 @@ public class ListRestController {
 
     @GetMapping("allUrls")
     public List<Link> allUrls() {
-        List<Link> sortLinksByDate = linkRepo.findAllByIp(linkValidatorService.getActualIP());
+        List<Link> sortLinksByDate = linkRepo.findAll();//findAllByIp(linkValidatorService.getActualIP());
         sortLinksByDate.sort(Comparator.comparing(Link::getGenerationDate).reversed());
 
         return sortLinksByDate;
