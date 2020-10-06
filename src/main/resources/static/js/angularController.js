@@ -40,8 +40,12 @@ app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
                     if (response.status === 409) {
                         $scope.errorMessage = response.data.message;
                         $scope.getAllLinks();
+                        $scope.checkIP();
+                        $scope.getCount();
                     } else {
                         $scope.getAllLinks();
+                        $scope.checkIP();
+                        $scope.getCount();
                         $scope.errorMessage = 'Invalid delete key';
                     }
                     $scope.message = 'as';
@@ -49,7 +53,6 @@ app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
 
 
         }
-
 
         $scope.getAllLinks = function () {
             UserCRUDService.getAllLinks()

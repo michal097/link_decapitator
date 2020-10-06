@@ -26,7 +26,11 @@ public class ListRestController {
     private final CheckIPService checkIPService;
 
     @Autowired
-    public ListRestController(LinkRepo linkRepo, LinkValidatorService linkValidatorService, LinkStatsService linkStatsService, CheckIPService checkIPService) {
+    public ListRestController(LinkRepo linkRepo,
+                              LinkValidatorService linkValidatorService,
+                              LinkStatsService linkStatsService,
+                              CheckIPService checkIPService) {
+
         this.linkRepo = linkRepo;
         this.linkValidatorService = linkValidatorService;
         this.linkStatsService = linkStatsService;
@@ -69,9 +73,9 @@ public class ListRestController {
         Map<String, Long> links = checkIPService.linkTracker(ipAPI);
         List<LinkTracker> linkTrackers = new ArrayList<>();
 
-        for(Map.Entry<String, Long> map : links.entrySet()){
-            String [] str = map.getKey().split(",");
-            linkTrackers.add(new LinkTracker(str[0],str[1],map.getValue()));
+        for (Map.Entry<String, Long> map : links.entrySet()) {
+            String[] str = map.getKey().split(",");
+            linkTrackers.add(new LinkTracker(str[0], str[1], map.getValue()));
         }
         linkTrackers.sort(Comparator.comparing(LinkTracker::getCountry));
         return linkTrackers;
