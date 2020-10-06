@@ -1,5 +1,6 @@
-package com.example.demo;
+package com.example.demo.repository;
 
+import com.example.demo.entity.Link;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -21,7 +22,6 @@ public interface LinkRepo extends CrudRepository<Link, Long> {
     List<Link> findAllByIp(String ip);
 
     List<Link> findAll();
-
     void deleteByDeleteKey(String deleteKey);
 
 }

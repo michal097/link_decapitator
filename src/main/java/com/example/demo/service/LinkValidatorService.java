@@ -1,5 +1,6 @@
-package com.example.demo;
+package com.example.demo.service;
 
+import com.example.demo.entity.Link;
 import org.apache.commons.validator.UrlValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -19,7 +20,9 @@ public class LinkValidatorService {
     }
 
     public String getActualIP(){
-        return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
+        return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+                .getRequest()
+                .getRemoteAddr();
     }
 
     public void makeNewLink(Link link) {

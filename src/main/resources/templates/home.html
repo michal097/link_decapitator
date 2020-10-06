@@ -19,7 +19,7 @@
 <form th:action="@{/save}" th:object="${link}" method="post">
     <h1> Enter the URL to shorten</h1>
     <div class="linkInput">
-     <input type="text" placeholder="enter some url adress" style="color: dimgrey; font-size: 20px;" th:field="*{originalName}"/>
+        <input type="text" placeholder="enter some url adress" style="color: dimgrey; font-size: 20px;" th:field="*{originalName}"/>
     </div>
     <button class="button" type="submit" value="SHORT!!!">Get short link</button>
 </form>
@@ -29,7 +29,7 @@
         <input type="text" th:value="${mess}" id="myInput" readonly>
         <button class="copy_button"onclick="myFunction()">Copy text</button>
     </p>
-  </div>
+</div>
 <div class="errors" th:if="${err}">
     <p th:text="${err}">err</p>
 </div>
@@ -44,7 +44,7 @@
             <label for="id">
             </label><input class="delete_input" type="text" placeholder="Enter delete key" style="color: dimgrey" id="id" ng-model="link.deleteKey" />
             <button class="button_delete" ng-click="deleteUser(link.deleteKey)"> Delete chosen link</button>
-        <br>
+            <br>
 
 
     </div>
@@ -55,7 +55,7 @@
 
     <button class="button_get_all" ng-click="getAllLinks();showDetails = ! showDetails">Get all links</button><br/><br/>
     <div ng-show="showDetails">
-            <table>
+        <table>
             <thead>
             <tr>
                 <th>Original URL</th>
@@ -77,7 +77,7 @@
             </tbody>
         </table>
 
-</div>
+    </div>
 </div>
 
 </body>

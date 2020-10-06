@@ -16,9 +16,9 @@ app.service('UserCRUDService', [ '$http', function($http) {
 }]);
 
 app.controller('UserCRUDCtrl', ['$scope','UserCRUDService',
-    function ($scope,UserCRUDService, $http, $timeout) {
+    function ($scope,UserCRUDService) {
 
-    $scope.submitted= false;
+        $scope.submitted= false;
 
         $scope.deleteUser = function () {
             UserCRUDService.deleteUser($scope.link)
@@ -32,7 +32,7 @@ app.controller('UserCRUDCtrl', ['$scope','UserCRUDService',
                         $scope.errorMessage = 'Invalid delete key';
                     }
                     $scope.message = 'as';
-                    })
+                })
 
 
         }
