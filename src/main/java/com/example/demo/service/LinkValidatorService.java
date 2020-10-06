@@ -19,7 +19,7 @@ public class LinkValidatorService {
         return urlValidator.isValid(url);
     }
 
-    public String getActualIP(){
+    public String getActualIP() {
         return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest()
                 .getRemoteAddr();
@@ -43,12 +43,12 @@ public class LinkValidatorService {
         link.setIp(getActualIP());
     }
 
-    public static String randomlyChangeCase(String str){
+    public static String randomlyChangeCase(String str) {
 
         return str.chars()
                 .mapToObj(c -> (char) c)
-                .map(c->c>97&&c%2==0?Character.toUpperCase(c)
-                                    :Character.toLowerCase(c))
+                .map(c -> c > 97 && c % 2 == 0 ? Character.toUpperCase(c)
+                        : Character.toLowerCase(c))
                 .map(Object::toString)
                 .collect(Collectors.joining()).trim();
     }

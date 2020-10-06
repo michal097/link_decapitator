@@ -27,8 +27,9 @@ public class Link {
     private String ip;
     @Column(name = "generation_date")
     private LocalDate generationDate;
+
     public Link() {
-        this.counter=0;
+        this.counter = 0;
         this.generationDate = LocalDate.now();
     }
 

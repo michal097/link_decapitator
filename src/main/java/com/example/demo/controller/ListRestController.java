@@ -31,11 +31,11 @@ public class ListRestController {
     public ListRestController(LinkRepo linkRepo, LinkValidatorService linkValidatorService, LinkStatsService linkStatsService) {
         this.linkRepo = linkRepo;
         this.linkValidatorService = linkValidatorService;
-        this.linkStatsService=linkStatsService;
+        this.linkStatsService = linkStatsService;
     }
 
     @GetMapping("allUrls")
-    public List<Link> allUrls(){
+    public List<Link> allUrls() {
         List<Link> sortLinksByDate = linkRepo.findAllByIp(linkValidatorService.getActualIP());
         sortLinksByDate.sort(Comparator.comparing(Link::getGenerationDate).reversed());
 
@@ -44,14 +44,14 @@ public class ListRestController {
 
     @DeleteMapping("delete/{deleteKey}")
     @Transactional
-    public ResponseEntity<Link> deleteLink(@PathVariable("deleteKey")String deleteKey){
+    public ResponseEntity<Link> deleteLink(@PathVariable("deleteKey") String deleteKey) {
 
         boolean deleteKeyIsPresent = linkRepo.findAll()
                 .stream()
-                .filter(ip->ip.getIp().equals(linkValidatorService.getActualIP()))
-                .anyMatch(k->k.getDeleteKey().equals(deleteKey));
+                .filter(ip -> ip.getIp().equals(linkValidatorService.getActualIP()))
+                .anyMatch(k -> k.getDeleteKey().equals(deleteKey));
 
-        if(deleteKeyIsPresent) {
+        if (deleteKeyIsPresent) {
             linkRepo.deleteByDeleteKey(deleteKey);
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -59,12 +59,12 @@ public class ListRestController {
     }
 
     @GetMapping("countAllUrls")
-    public Stats countLinks(){
+    public Stats countLinks() {
         return new Stats(linkStatsService.countAllLinks(),
-                             linkStatsService.countAllRedirectedURLs());
+                linkStatsService.countAllRedirectedURLs());
     }
 
-    @GetMapping("test")
+    @GetMapping("checkIP")
     public List<LinkTracker> stats() throws IOException {
 
         List<String> allIps = linkRepo.findAll()
@@ -76,19 +76,19 @@ public class ListRestController {
 
         final String ipAPI = "http://ip-api.com/json/";
 
-        for(String s: allIps){
+        for (String s : allIps) {
             long countApperances = linkRepo.findAll()
                     .stream()
-                    .filter(ip->ip.getIp().equals(s))
+                    .filter(ip -> ip.getIp().equals(s))
                     .count();
-            JSONObject jsonObject = new JSONObject(IOUtils.toString(new URL(ipAPI+s), StandardCharsets.UTF_8));
+            JSONObject jsonObject = new JSONObject(IOUtils.toString(new URL(ipAPI + s), StandardCharsets.UTF_8));
 
             if (jsonObject.getString("status").equals("fail")) {
                 System.out.println("This is not ip");
             } else {
                 assignData.add(new LinkTracker(jsonObject.getString("country"),
-                                               jsonObject.getString("city"),
-                                               countApperances));
+                        jsonObject.getString("city"),
+                        countApperances));
             }
         }
         return assignData;

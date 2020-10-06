@@ -12,11 +12,11 @@ public class LinkStatsService {
     private final LinkRepo linkRepo;
 
     @Autowired
-    LinkStatsService(LinkRepo linkRepo){
+    LinkStatsService(LinkRepo linkRepo) {
         this.linkRepo = linkRepo;
     }
 
-    public long countAllRedirectedURLs(){
+    public long countAllRedirectedURLs() {
         return linkRepo.findAll()
                 .stream()
                 .map(Link::getCounter)
@@ -25,7 +25,7 @@ public class LinkStatsService {
 
     }
 
-    public long countAllLinks(){
+    public long countAllLinks() {
         return linkRepo.findAll().size();
     }
 

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Link decapitator</title>
-    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     <script type="text/javascript" th:src="@{/js/angularController.js}"></script>
     <script type="text/javascript" th:src="@{/js/copy.js}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
@@ -11,23 +11,25 @@
             th:src="@{/js/angularController.js}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-messages.js">
     </script>
+
+
 </head>
 
 
-<body ng-app="app" >
-
+<body ng-app="app">
 <form th:action="@{/save}" th:object="${link}" method="post">
     <h1> Enter the URL to shorten</h1>
     <div class="linkInput">
-        <input type="text" placeholder="enter some url adress" style="color: dimgrey; font-size: 20px;" th:field="*{originalName}"/>
+        <input type="text" placeholder="enter some url adress" style="color: dimgrey; font-size: 20px;"
+               th:field="*{originalName}"/>
     </div>
     <button class="button" type="submit" value="SHORT!!!">Get short link</button>
 </form>
 
-<div class="result" th:if="${mess}" >
+<div class="result" th:if="${mess}">
     <p>Your short link:
         <input type="text" th:value="${mess}" id="myInput" readonly>
-        <button class="copy_button"onclick="myFunction()">Copy text</button>
+        <button class="copy_button" onclick="myFunction()">Copy text</button>
     </p>
 </div>
 <div class="errors" th:if="${err}">
@@ -36,13 +38,42 @@
 
 <div class="content" ng-controller="UserCRUDCtrl">
 
+    <button class="button_get_all" ng-click="showCounter = ! showCounter">Show statistics</button>
+
+    <div ng-show="showCounter">
+
+        <p style="font-size: 20px"><strong>All created links </strong><br>{{stats.countAllLinks}}</p>
+        <p style="font-size: 20px"><strong>Counter redirected links </strong><br>{{stats.redirectedLinksCounter}}</p>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Country</th>
+                <th>City</th>
+                <th>Count of created links</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="i in ip">
+                <td>{{i.country}}</td>
+                <td>{{i.city}}</td>
+                <td>{{i.countLinksByIp}}</td>
+
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
     <button class="button_del" ng-click="showDelete = ! showDelete">Delete link</button>
 
-    <div ng-show = "showDelete">
+    <div ng-show="showDelete">
 
         <p>
             <label for="id">
-            </label><input class="delete_input" type="text" placeholder="Enter delete key" style="color: dimgrey" id="id" ng-model="link.deleteKey" />
+            </label><input class="delete_input" type="text" placeholder="Enter delete key" style="color: dimgrey"
+                           id="id" ng-model="link.deleteKey"/>
             <button class="button_delete" ng-click="deleteUser(link.deleteKey)"> Delete chosen link</button>
             <br>
 
@@ -53,7 +84,8 @@
         <p th:text="${delErr}">err</p>
     </div>
 
-    <button class="button_get_all" ng-click="getAllLinks();showDetails = ! showDetails">Get all links</button><br/><br/>
+    <button class="button_get_all" ng-click="getAllLinks();showDetails = ! showDetails">Get all links</button>
+    <br/><br/>
     <div ng-show="showDetails">
         <table>
             <thead>
