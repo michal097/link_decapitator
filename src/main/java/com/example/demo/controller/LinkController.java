@@ -3,14 +3,20 @@ package com.example.demo.controller;
 import com.example.demo.entity.Link;
 import com.example.demo.service.LinkValidatorService;
 import com.example.demo.repository.LinkRepo;
+import com.example.demo.service.ReadCSVService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.naming.NamingException;
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -19,11 +25,13 @@ public class LinkController {
 
     private final LinkRepo linkRepo;
     private final LinkValidatorService linkValidatorService;
+    private final ReadCSVService readCSVService;
 
     @Autowired
-    LinkController(LinkRepo linkRepo, LinkValidatorService linkValidatorService) {
+    LinkController(LinkRepo linkRepo, LinkValidatorService linkValidatorService, ReadCSVService readCSVService) {
         this.linkRepo = linkRepo;
         this.linkValidatorService = linkValidatorService;
+        this.readCSVService=readCSVService;
     }
 
     @GetMapping("/")
@@ -68,6 +76,47 @@ public class LinkController {
 
         redirectView.setUrl(url);
         return redirectView;
+    }
+
+    @PostMapping("/uploadFile")
+    public String saveMultiLinks(@RequestParam("file") MultipartFile file,
+                                 RedirectAttributes redirectAttributes) {
+
+        try{
+            if(!Objects.requireNonNull(file.getOriginalFilename()).endsWith(".csv"))
+                throw new NamingException();
+            readCSVService.uploadFile(file);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("uplErr", "Invalid file structure");
+            return "redirect:/";
+
+        }
+
+           try {
+               List<String> urls = readCSVService.multiUrls(file);
+
+               for(String s: urls){
+
+                   String str =  s.startsWith("http://")?s.trim():"http://"+s.trim();
+
+               if (linkValidatorService.checkValid(str)) {
+                   Link link = new Link();
+                   link.setOriginalName(str);
+                   linkValidatorService.makeNewLink(link);
+                   linkRepo.save(link);
+               }
+
+        }
+           }catch (Exception e){
+               e.printStackTrace();
+               redirectAttributes.addFlashAttribute("uplErr", "Bad URL's structure");
+               return "redirect:/";
+           }
+
+        redirectAttributes.addFlashAttribute("uplSucc", "URL's has been decapitated successfully!");
+        return "redirect:/";
     }
 
 }

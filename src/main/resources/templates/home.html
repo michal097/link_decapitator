@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <title>Link decapitator</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" th:src="@{/js/angularController.js}"></script>
     <script type="text/javascript" th:src="@{/js/copy.js}"></script>
+    <script type="text/javascript" th:src="@{/js/uploadFile.js}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="../static/js/angularController.js"
             th:src="@{/js/angularController.js}"></script>
@@ -36,9 +38,13 @@
     <p th:text="${err}">err</p>
 </div>
 
+
 <div class="content" ng-controller="UserCRUDCtrl">
 
     <button class="button_get_all" ng-click="showCounter = ! showCounter">Show statistics</button>
+    <button class="button_del" ng-click="showDelete = ! showDelete">Delete link</button>
+    <button class="button_stats" ng-click="getAllLinks();showDetails = ! showDetails">Get all links</button>
+    <button class="button_stats" ng-click="upl = ! upl">Upload multi URL's</button>
 
     <div ng-show="showCounter">
 
@@ -66,7 +72,7 @@
 
     </div>
 
-    <button class="button_del" ng-click="showDelete = ! showDelete">Delete link</button>
+
 
     <div ng-show="showDelete">
 
@@ -84,7 +90,7 @@
         <p th:text="${delErr}">err</p>
     </div>
 
-    <button class="button_get_all" ng-click="getAllLinks();showDetails = ! showDetails">Get all links</button>
+
     <br/><br/>
     <div ng-show="showDetails">
         <table>
@@ -95,6 +101,7 @@
                 <th>Number of visits</th>
                 <th>Delete key</th>
                 <th>IP</th>
+                <th>Redirect</th>
 
             </tr>
             </thead>
@@ -105,10 +112,33 @@
                 <td>{{link.counter}}</td>
                 <td>{{link.deleteKey}}</td>
                 <td>{{link.ip}}</td>
+                <td><a class="button" ng-href="/{{link.newName}}" target="_blank">Redirect me</a></td>
             </tr>
             </tbody>
         </table>
 
+    </div>
+
+    <div ng-show="upl">
+        <form method="POST" th:action="@{/uploadFile}" enctype="multipart/form-data">
+
+            <br><br><br>
+            <label for="uploadfile" class = "button_choose_upl">Choose file to upload</label>
+            <br><br>
+            <input style="display: none" type="file" name="file" class = "upload" id ="uploadfile"  >
+
+            <p>You have choosen: <span id="file-selected" class = "file_path"></span> </p>
+            <br><br>
+            <button class= "button_accept_file" type="submit"  >Submit </button>
+
+        </form>
+    </div>
+
+    <div class="errors" th:if="${uplErr}">
+        <p th:text="${uplErr}">err</p>
+    </div>
+    <div class="success" th:if="${uplSucc}">
+        <p th:text="${uplSucc}">upl succ</p>
     </div>
 </div>
 

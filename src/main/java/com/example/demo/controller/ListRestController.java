@@ -7,6 +7,7 @@ import com.example.demo.service.CheckIPService;
 import com.example.demo.service.LinkStatsService;
 import com.example.demo.service.LinkValidatorService;
 import com.example.demo.repository.LinkRepo;
+import com.example.demo.service.ReadCSVService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +26,19 @@ public class ListRestController {
     private final LinkStatsService linkStatsService;
     private final CheckIPService checkIPService;
 
+
     @Autowired
     public ListRestController(LinkRepo linkRepo,
                               LinkValidatorService linkValidatorService,
                               LinkStatsService linkStatsService,
-                              CheckIPService checkIPService) {
+                              CheckIPService checkIPService
+    ) {
 
         this.linkRepo = linkRepo;
         this.linkValidatorService = linkValidatorService;
         this.linkStatsService = linkStatsService;
         this.checkIPService = checkIPService;
+
     }
 
     @GetMapping("allUrls")
@@ -67,7 +71,7 @@ public class ListRestController {
                 linkStatsService.countAllRedirectedURLs());
     }
 
-    @GetMapping("checkIP")
+   // @GetMapping("checkIP")
     public List<LinkTracker> stats() throws IOException {
         final String ipAPI = "http://ip-api.com/json/";
         Map<String, Long> links = checkIPService.linkTracker(ipAPI);
