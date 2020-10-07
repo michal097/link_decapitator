@@ -71,7 +71,7 @@ public class ListRestController {
                 linkStatsService.countAllRedirectedURLs());
     }
 
-   // @GetMapping("checkIP")
+    @GetMapping("checkIP")
     public List<LinkTracker> stats() throws IOException {
         final String ipAPI = "http://ip-api.com/json/";
         Map<String, Long> links = checkIPService.linkTracker(ipAPI);
