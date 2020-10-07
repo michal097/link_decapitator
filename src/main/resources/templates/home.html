@@ -8,6 +8,7 @@
     <script type="text/javascript" th:src="@{/js/angularController.js}"></script>
     <script type="text/javascript" th:src="@{/js/copy.js}"></script>
     <script type="text/javascript" th:src="@{/js/uploadFile.js}"></script>
+    <script type="text/javascript" th:src="@{/js/hideNotifications.js}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="../static/js/angularController.js"
             th:src="@{/js/angularController.js}"></script>
@@ -18,7 +19,7 @@
 </head>
 
 
-<body ng-app="app">
+<body onload="hide();hide1()" ng-app="app">
 <form th:action="@{/save}" th:object="${link}" method="post">
     <h1> Enter the URL to shorten</h1>
     <div class="linkInput">
@@ -38,7 +39,18 @@
     <p th:text="${err}">err</p>
 </div>
 
-
+<script>
+    function hide() {
+        setTimeout(function(){
+            document.getElementById('inform').classList.add('hidden');
+        },5000)
+    }
+    function hide1() {
+        setTimeout(function(){
+            document.getElementById('inform1').classList.add('hidden');
+        },5000)
+    }
+</script>
 <div class="content" ng-controller="UserCRUDCtrl">
 
     <button class="button_get_all" ng-click="showCounter = ! showCounter">Show statistics</button>
@@ -86,7 +98,7 @@
 
     </div>
 
-    <div class="errors" th:if="${delErr}">
+    <div class="errors" id = "inform" th:if="${delErr}">
         <p th:text="${delErr}">err</p>
     </div>
 
@@ -131,15 +143,23 @@
             <br><br>
             <button class= "button_accept_file" type="submit"  >Submit </button>
 
+            <script>
+                $('#uploadfile').bind('change', function() {
+                    var fileName = '';
+                    fileName = $(this).val();
+                    $('#file-selected').html(fileName); })
+            </script>
+
         </form>
     </div>
-
+<div id="inform1">
     <div class="errors" th:if="${uplErr}">
         <p th:text="${uplErr}">err</p>
     </div>
     <div class="success" th:if="${uplSucc}">
         <p th:text="${uplSucc}">upl succ</p>
     </div>
+</div>
 </div>
 
 </body>

@@ -228,3 +228,7 @@ th {
 .button_choose_upl:hover {
     background-color: #64e7e7;
 }
+
+.hidden{
+    display: none;
+}
