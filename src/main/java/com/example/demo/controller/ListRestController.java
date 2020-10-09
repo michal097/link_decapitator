@@ -3,12 +3,10 @@ package com.example.demo.controller;
 import com.example.demo.entity.Link;
 import com.example.demo.entity.LinkTracker;
 import com.example.demo.entity.Stats;
-import com.example.demo.service.CheckIPService;
-import com.example.demo.service.LinkStatsService;
-import com.example.demo.service.LinkValidatorService;
+import com.example.demo.service.*;
 import com.example.demo.repository.LinkRepo;
-import com.example.demo.service.ReadCSVService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,23 +23,26 @@ public class ListRestController {
     private final LinkValidatorService linkValidatorService;
     private final LinkStatsService linkStatsService;
     private final CheckIPService checkIPService;
+    private final PageableService pageableService;
 
 
     @Autowired
     public ListRestController(LinkRepo linkRepo,
                               LinkValidatorService linkValidatorService,
                               LinkStatsService linkStatsService,
-                              CheckIPService checkIPService
+                              CheckIPService checkIPService,
+                              PageableService pageableService
     ) {
 
         this.linkRepo = linkRepo;
         this.linkValidatorService = linkValidatorService;
         this.linkStatsService = linkStatsService;
         this.checkIPService = checkIPService;
+        this.pageableService=pageableService;
 
     }
 
-    @GetMapping("allUrls")
+   // @GetMapping("allUrls")
     public List<Link> allUrls() {
         List<Link> sortLinksByDate = linkRepo.findAllByIp(linkValidatorService.getActualIP());
         sortLinksByDate.sort(Comparator.comparing(Link::getGenerationDate).reversed());
@@ -71,7 +72,7 @@ public class ListRestController {
                 linkStatsService.countAllRedirectedURLs());
     }
 
-    @GetMapping("checkIP")
+    //@GetMapping("checkIP")
     public List<LinkTracker> stats() throws IOException {
         final String ipAPI = "http://ip-api.com/json/";
         Map<String, Long> links = checkIPService.linkTracker(ipAPI);
@@ -83,5 +84,16 @@ public class ListRestController {
         }
         linkTrackers.sort(Comparator.comparing(LinkTracker::getCountry));
         return linkTrackers;
+    }
+
+
+    @GetMapping("/allUrls")
+    public ResponseEntity<List<Link>> pagedLinks(
+            @RequestParam(defaultValue = "0") Integer pageNumber,
+            @RequestParam(defaultValue = "3") Integer pageSize,
+            @RequestParam(defaultValue = "generationDate") String data
+    ){
+        List<Link> links = pageableService.getAllLinksWithPagination(pageNumber,pageSize,data);
+        return new ResponseEntity<>(links, new HttpHeaders(),HttpStatus.OK);
     }
 }

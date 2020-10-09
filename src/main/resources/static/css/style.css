@@ -193,12 +193,13 @@ th {
     background-color: #605220;
     border: none;
     color: white;
+    padding: 30px;
     text-align: center;
     text-decoration: none;
     font-size: 16px;
     cursor: pointer;
-    height: 40px;
-    width: 250px;
+    height: 600px;
+    width: 400px;
     border-radius: 10px;
 }
 
@@ -225,10 +226,12 @@ th {
     border-radius: 10px;
 }
 
-.button_choose_upl:hover {
+.button_accept_file:hover {
     background-color: #64e7e7;
 }
 
 .hidden{
     display: none;
 }
+.tabsdemoDynamicHeight md-content h1:first-child {
+    margin-top: 0; }

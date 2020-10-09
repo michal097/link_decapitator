@@ -14,11 +14,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.naming.NamingException;
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
 
 @Controller
 public class LinkController {

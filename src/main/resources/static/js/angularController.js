@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngMessages']);
+var app = angular.module('app', ['ngMessages','ngMaterial']);
 app.service('UserCRUDService', ['$http', function ($http) {
 
     this.getAllLinks = function getAllLinks() {
@@ -7,6 +7,8 @@ app.service('UserCRUDService', ['$http', function ($http) {
             url: 'allUrls/'
         });
     }
+
+
 
     this.getCount = function getCount() {
         return $http({
@@ -30,9 +32,10 @@ app.service('UserCRUDService', ['$http', function ($http) {
 }]);
 
 app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
-    function ($scope, UserCRUDService) {
+    function ($scope, UserCRUDService, $http) {
 
         $scope.submitted = false;
+
 
         $scope.deleteUser = function () {
             UserCRUDService.deleteUser($scope.link)
