@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Link;
 import com.example.demo.service.LinkValidatorService;
 import com.example.demo.repository.LinkRepo;
-import com.example.demo.service.ReadCSVService;
+import com.example.demo.service.ReadWriteCSVService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,13 +23,13 @@ public class LinkController {
 
     private final LinkRepo linkRepo;
     private final LinkValidatorService linkValidatorService;
-    private final ReadCSVService readCSVService;
+    private final ReadWriteCSVService readWriteCSVService;
 
     @Autowired
-    LinkController(LinkRepo linkRepo, LinkValidatorService linkValidatorService, ReadCSVService readCSVService) {
+    LinkController(LinkRepo linkRepo, LinkValidatorService linkValidatorService, ReadWriteCSVService readWriteCSVService) {
         this.linkRepo = linkRepo;
         this.linkValidatorService = linkValidatorService;
-        this.readCSVService=readCSVService;
+        this.readWriteCSVService=readWriteCSVService;
     }
 
     @GetMapping("/")
@@ -83,7 +83,7 @@ public class LinkController {
         try{
             if(!Objects.requireNonNull(file.getOriginalFilename()).endsWith(".csv"))
                 throw new NamingException();
-            readCSVService.uploadFile(file);
+            readWriteCSVService.uploadFile(file);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -93,7 +93,7 @@ public class LinkController {
         }
 
            try {
-               List<String> urls = readCSVService.multiUrls(file);
+               List<String> urls = readWriteCSVService.multiUrls(file);
 
                for(String s: urls){
 

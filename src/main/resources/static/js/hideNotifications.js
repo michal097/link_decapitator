@@ -8,3 +8,4 @@ function hide1() {
         document.getElementById('inform1').classList.add('hidden');
     },5000)
 }
+

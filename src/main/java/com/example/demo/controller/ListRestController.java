@@ -6,12 +6,16 @@ import com.example.demo.entity.Stats;
 import com.example.demo.service.*;
 import com.example.demo.repository.LinkRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -24,6 +28,7 @@ public class ListRestController {
     private final LinkStatsService linkStatsService;
     private final CheckIPService checkIPService;
     private final PageableService pageableService;
+    private final ReadWriteCSVService readWriteCSVService;
 
 
     @Autowired
@@ -31,7 +36,8 @@ public class ListRestController {
                               LinkValidatorService linkValidatorService,
                               LinkStatsService linkStatsService,
                               CheckIPService checkIPService,
-                              PageableService pageableService
+                              PageableService pageableService,
+                              ReadWriteCSVService readWriteCSVService
     ) {
 
         this.linkRepo = linkRepo;
@@ -39,10 +45,11 @@ public class ListRestController {
         this.linkStatsService = linkStatsService;
         this.checkIPService = checkIPService;
         this.pageableService=pageableService;
+        this.readWriteCSVService=readWriteCSVService;
 
     }
 
-   // @GetMapping("allUrls")
+    @GetMapping("allUrls")
     public List<Link> allUrls() {
         List<Link> sortLinksByDate = linkRepo.findAllByIp(linkValidatorService.getActualIP());
         sortLinksByDate.sort(Comparator.comparing(Link::getGenerationDate).reversed());
@@ -52,7 +59,8 @@ public class ListRestController {
 
     @DeleteMapping("delete/{deleteKey}")
     @Transactional
-    public ResponseEntity<Link> deleteLink(@PathVariable("deleteKey") String deleteKey) {
+    public @ResponseBody
+    ResponseEntity<Link> deleteLink(@PathVariable("deleteKey") String deleteKey) {
 
         boolean deleteKeyIsPresent = linkRepo.findAll()
                 .stream()
@@ -60,7 +68,7 @@ public class ListRestController {
                 .anyMatch(k -> k.getDeleteKey().equals(deleteKey));
 
         if (deleteKeyIsPresent) {
-            linkRepo.deleteByDeleteKey(deleteKey);
+            linkRepo.deleteByDeleteKey(deleteKey.trim());
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -86,14 +94,32 @@ public class ListRestController {
         return linkTrackers;
     }
 
+    //REST PAGINATION IN PROGRESS!!!
 
-    @GetMapping("/allUrls")
-    public ResponseEntity<List<Link>> pagedLinks(
+   // @GetMapping("/allUrls")
+    public  ResponseEntity<List<Link>> pagedLinks(
             @RequestParam(defaultValue = "0") Integer pageNumber,
-            @RequestParam(defaultValue = "3") Integer pageSize,
+            @RequestParam(defaultValue = "5") Integer pageSize,
             @RequestParam(defaultValue = "generationDate") String data
     ){
         List<Link> links = pageableService.getAllLinksWithPagination(pageNumber,pageSize,data);
         return new ResponseEntity<>(links, new HttpHeaders(),HttpStatus.OK);
     }
+
+    @GetMapping("/downloadText")
+    public ResponseEntity<InputStreamResource> str() throws IOException {
+
+        File file = new File(ReadWriteCSVService.PATH);
+
+        readWriteCSVService.makeAndWriteToCSV();
+
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment;filename=" + file.getName())
+                .contentType(MediaType.APPLICATION_PDF).contentLength(file.length())
+                .body(resource);
+    }
 }
+

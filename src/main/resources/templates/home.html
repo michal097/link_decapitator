@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Link decapitator</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -18,21 +19,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" th:src="@{/js/angularController.js}"></script>
     <script type="text/javascript" th:src="@{/js/copy.js}"></script>
-    <script type="text/javascript" th:src="@{/js/uploadFile.js}"></script>
     <script type="text/javascript" th:src="@{/js/hideNotifications.js}"></script>
 
-    <script src="../static/js/angularController.js"
-            th:src="@{/js/angularController.js}"></script>
+    <script src="../static/js/angularController.js" th:src="@{/js/angularController.js}"></script>
 
-    </head>
+</head>
 
 
 <body onload="hide();hide1()" ng-app="app">
 <form th:action="@{/save}" th:object="${link}" method="post">
-    <h1> Enter the URL to shorten</h1>
+    <h1> Enter your URL to shorten</h1>
     <div class="linkInput">
-        <input type="text" placeholder="enter some url adress" style="color: dimgrey; font-size: 20px;"
-               th:field="*{originalName}"/>
+        <input type="text" placeholder="enter some url adress" style="color: dimgrey; font-size: 20px;" th:field="*{originalName}" />
     </div>
     <button class="button" type="submit" value="SHORT!!!">Get short link</button>
 </form>
@@ -49,15 +47,17 @@
 
 <script>
     function hide() {
-        setTimeout(function(){
+        setTimeout(function() {
             document.getElementById('inform').classList.add('hidden');
-        },5000)
+        }, 5000)
     }
+
     function hide1() {
-        setTimeout(function(){
+        setTimeout(function() {
             document.getElementById('inform1').classList.add('hidden');
-        },5000)
+        }, 5000)
     }
+
 </script>
 <div class="content" ng-controller="UserCRUDCtrl">
     <div ng-cloak="" class="tabsdemoDynamicHeight">
@@ -65,7 +65,7 @@
             <md-tabs md-dynamic-height="" md-border-bottom="">
                 <md-tab label="Show statiscics">
                     <md-content class="md-padding">
-                        <div >
+                        <div>
 
                             <p style="font-size: 20px"><strong>All created links </strong><br>{{stats.countAllLinks}}</p>
                             <p style="font-size: 20px"><strong>Counter redirected links </strong><br>{{stats.redirectedLinksCounter}}</p>
@@ -95,7 +95,8 @@
 
                 <md-tab label="my all links">
                     <md-content class="md-padding">
-                        <div >
+                        <div>
+                            <md-button ng-href="/downloadText" class="md-raised"> Download report</md-button>
                             <table>
                                 <thead>
                                 <tr>
@@ -123,7 +124,7 @@
                             </table>
 
                             <button ng-click='previousPage()'>Previous</button>
-                                <button ng-click='nextPage()'>Next</button>
+                            <button ng-click='nextPage()'>Next</button>
 
                         </div>
 
@@ -133,14 +134,16 @@
                     <md-content class="md-padding">
                         <form name="projectForm">
 
-                            <div >
+                            <div>
                                 <md-input-container flex="50">
                                     <label>Delete link - enter delete key</label>
                                     <input class="delete_input" type="text" required="" name="delete" ng-model="link.deleteKey">
                                     <button class="button_delete" ng-click="deleteUser(link.deleteKey)"> Delete chosen link</button>
-                                    <div ng-messages="projectForm.delete.$error">
+                                    <div ng-messages="projectForm.link.deleteKey.$error">
                                         <div ng-message="required">Delete key is required</div>
                                     </div>
+                                    <div ng-if="errorMessage">aaa: {{errorMessage}}</div>
+                                    <p style="font-size: 20px; color: #0f9b05"> {{message}} </p>
                                 </md-input-container>
 
                             </div>
@@ -151,17 +154,32 @@
 
                 <md-tab label="upload multi urls">
                     <md-content class="md-padding">
-                        <div >
+                        <div>
                             <form method="POST" th:action="@{/uploadFile}" enctype="multipart/form-data">
 
                                 <br><br><br>
-                                <label for="uploadfile" class = "button_choose_upl">Choose file to upload</label>
-                                <br><br>
-                                <input style="display: none" type="file" name="file" class = "upload" id ="uploadfile"  >
+                                <div class="downloadArea" id="yourBtn" onclick="getFile()">click to choose a file</div>
+                                <div style='height: 0;width: 0; overflow:hidden;'>
+                                    <input id="upfile" type="file" name="file" value="upload" onchange="sub(this)" />
+                                </div>
 
-                                <p>You have choosen: <span id="file-selected" class = "file_path"></span> </p>
+
                                 <br><br>
-                                <button class= "button_accept_file" type="submit"  >Submit </button>
+                                <button class="button_accept_file" type="submit">Submit </button>
+
+                                <script>
+                                    function getFile() {
+                                        document.getElementById("upfile").click();
+                                    }
+
+                                    function sub(obj) {
+                                        const file = obj.value;
+                                        const fileName = file.split("\\");
+                                        document.getElementById("yourBtn").innerHTML = fileName[fileName.length - 1];
+
+                                    }
+
+                                </script>
 
                             </form>
                         </div>
@@ -171,19 +189,20 @@
         </md-content>
     </div>
 
-    <div class="errors" id = "inform" th:if="${delErr}">
+    <div class="errors" id="inform" th:if="${delErr}">
         <p th:text="${delErr}">err</p>
     </div>
 
-<div id="inform1">
-    <div class="errors" th:if="${uplErr}">
-        <p th:text="${uplErr}">err</p>
+    <div id="inform1">
+        <div class="errors" th:if="${uplErr}">
+            <p th:text="${uplErr}">err</p>
+        </div>
+        <div class="success" th:if="${uplSucc}">
+            <p th:text="${uplSucc}">upl succ</p>
+        </div>
     </div>
-    <div class="success" th:if="${uplSucc}">
-        <p th:text="${uplSucc}">upl succ</p>
-    </div>
-</div>
 </div>
 
 </body>
+
 </html>

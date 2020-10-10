@@ -1,4 +1,10 @@
-    $('#uploadfile').bind('change', function() {
-    var fileName = '';
-    fileName = $(this).val();
-    $('#file-selected').html(fileName); })
+    function getFile() {
+    document.getElementById("upfile").click();
+}
+
+    function sub(obj) {
+    const file = obj.value;
+    const fileName = file.split("\\");
+    document.getElementById("yourBtn").innerHTML = fileName[fileName.length - 1];
+
+}
