@@ -49,7 +49,7 @@ public class ListRestController {
 
     }
 
-    @GetMapping("allUrls")
+   // @GetMapping("allUrls")
     public List<Link> allUrls() {
         List<Link> sortLinksByDate = linkRepo.findAllByIp(linkValidatorService.getActualIP());
         sortLinksByDate.sort(Comparator.comparing(Link::getGenerationDate).reversed());
@@ -96,7 +96,7 @@ public class ListRestController {
 
     //REST PAGINATION IN PROGRESS!!!
 
-   // @GetMapping("/allUrls")
+    @GetMapping("/allUrls")
     public  ResponseEntity<List<Link>> pagedLinks(
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "5") Integer pageSize,

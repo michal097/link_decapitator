@@ -15,6 +15,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
     <script data-require="jquery@*" data-semver="2.0.3" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.css">
+    <script src="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.js"></script>
     <script data-require="bootstrap@3.1.1" data-semver="3.1.1" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" th:src="@{/js/angularController.js}"></script>
@@ -38,7 +40,13 @@
 <div class="result" th:if="${mess}">
     <p>Your short link:
         <input type="text" th:value="${mess}" id="myInput" readonly>
-        <button class="copy_button" onclick="myFunction()">Copy text</button>
+        <button id="copy" class="copy_button" onclick="myFunction();changeText()">Copy text</button>
+
+        <script>
+            function changeText() {
+                document.getElementById("copy").innerHTML = 'Coppied!';
+            }
+        </script>
     </p>
 </div>
 <div class="errors" th:if="${err}">
@@ -97,34 +105,7 @@
                     <md-content class="md-padding">
                         <div>
                             <md-button ng-href="/downloadText" class="md-raised"> Download report</md-button>
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th>Original URL</th>
-                                    <th>New URL</th>
-                                    <th>Number of visits</th>
-                                    <th>Delete key</th>
-                                    <th>IP</th>
-                                    <th>Created date</th>
-                                    <th>Redirect</th>
-
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="link in links">
-                                    <td>{{link.originalName}}</td>
-                                    <td>s91.herokuapp.com/{{link.newName}}</td>
-                                    <td>{{link.counter}}</td>
-                                    <td>{{link.deleteKey}}</td>
-                                    <td>{{link.ip}}</td>
-                                    <td>{{link.generationDate}}</td>
-                                    <td><a class="button" ng-href="/{{link.newName}}" target="_blank">Redirect me</a></td>
-                                </tr>
-                                </tbody>
-                            </table>
-
-                            <button ng-click='previousPage()'>Previous</button>
-                            <button ng-click='nextPage()'>Next</button>
+                            <div ui-grid="gridOptions" class="grid" ui-grid-pagination></div>
 
                         </div>
 
