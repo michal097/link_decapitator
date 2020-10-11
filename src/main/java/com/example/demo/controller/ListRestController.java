@@ -44,18 +44,12 @@ public class ListRestController {
         this.linkValidatorService = linkValidatorService;
         this.linkStatsService = linkStatsService;
         this.checkIPService = checkIPService;
-        this.pageableService=pageableService;
-        this.readWriteCSVService=readWriteCSVService;
+        this.pageableService = pageableService;
+        this.readWriteCSVService = readWriteCSVService;
+
 
     }
 
-   // @GetMapping("allUrls")
-    public List<Link> allUrls() {
-        List<Link> sortLinksByDate = linkRepo.findAllByIp(linkValidatorService.getActualIP());
-        sortLinksByDate.sort(Comparator.comparing(Link::getGenerationDate).reversed());
-
-        return sortLinksByDate;
-    }
 
     @DeleteMapping("delete/{deleteKey}")
     @Transactional
@@ -80,6 +74,25 @@ public class ListRestController {
                 linkStatsService.countAllRedirectedURLs());
     }
 
+    //REST PAGINATION FOR IP CHECKER IN PROGRESS
+
+    //    @GetMapping("checkIP")
+//    public ResponseEntity<List<LinkTracker>> stats(
+//            @RequestParam(defaultValue = "0") Integer pageNumber,
+//            @RequestParam(defaultValue = "5") Integer pageSize
+//    ) throws IOException {
+//        final String ipAPI = "http://ip-api.com/json/";
+//        Map<String, Long> links = checkIPService.linkTracker(ipAPI);
+//
+//        for (Map.Entry<String, Long> map : links.entrySet()) {
+//            String[] str = map.getKey().split(",");
+//            pageableService.saveToLinkTrackerRepo(new LinkTracker(str[0], str[1], map.getValue()));
+//        }
+//
+//        List<LinkTracker> linkTracker = pageableService.linkTrackerList(pageNumber,pageSize);
+//
+//        return new ResponseEntity<>(linkTracker,new HttpHeaders(),HttpStatus.OK);
+//    }
     @GetMapping("checkIP")
     public List<LinkTracker> stats() throws IOException {
         final String ipAPI = "http://ip-api.com/json/";
@@ -94,17 +107,16 @@ public class ListRestController {
         return linkTrackers;
     }
 
-    //REST PAGINATION IN PROGRESS!!!
-
     @GetMapping("/allUrls")
-    public  ResponseEntity<List<Link>> pagedLinks(
+    public ResponseEntity<List<Link>> pagedLinks(
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "5") Integer pageSize,
             @RequestParam(defaultValue = "generationDate") String data
-    ){
-        List<Link> links = pageableService.getAllLinksWithPagination(pageNumber,pageSize,data);
-        return new ResponseEntity<>(links, new HttpHeaders(),HttpStatus.OK);
+    ) {
+        List<Link> links = pageableService.getAllLinksWithPagination(pageNumber, pageSize, data);
+        return new ResponseEntity<>(links, new HttpHeaders(), HttpStatus.OK);
     }
+
 
     @GetMapping("/downloadText")
     public ResponseEntity<InputStreamResource> str() throws IOException {

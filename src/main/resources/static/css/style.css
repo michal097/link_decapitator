@@ -254,3 +254,13 @@ th {
     width:60%;
     font-size: 17px;
 }
+
+.md-whiteframe-6dp{
+
+    margin-top: 5%;
+    margin-bottom: 5%;
+    width: 400px;
+
+}
+#stats1 {display:inline-block;margin-right:10px;}
+#stats2 {display:inline-block;}

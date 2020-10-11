@@ -46,6 +46,7 @@
             function changeText() {
                 document.getElementById("copy").innerHTML = 'Coppied!';
             }
+
         </script>
     </p>
 </div>
@@ -73,31 +74,36 @@
             <md-tabs md-dynamic-height="" md-border-bottom="">
                 <md-tab label="Show statiscics">
                     <md-content class="md-padding">
-                        <div>
+
+                        <md-whiteframe id="stats1"class="md-whiteframe-6dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout layout-align="center center">
 
                             <p style="font-size: 20px"><strong>All created links </strong><br>{{stats.countAllLinks}}</p>
+                        </md-whiteframe>
+                        <md-whiteframe id="stats2" class="md-whiteframe-6dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout layout-align="center center">
                             <p style="font-size: 20px"><strong>Counter redirected links </strong><br>{{stats.redirectedLinksCounter}}</p>
+                        </md-whiteframe>
 
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th>Country</th>
-                                    <th>City</th>
-                                    <th>Count of created links</th>
 
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="i in ip">
-                                    <td>{{i.country}}</td>
-                                    <td>{{i.city}}</td>
-                                    <td>{{i.countLinksByIp}}</td>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Country</th>
+                                <th>City</th>
+                                <th>Count of created links</th>
 
-                                </tr>
-                                </tbody>
-                            </table>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="i in ip">
+                                <td>{{i.country}}</td>
+                                <td>{{i.city}}</td>
+                                <td>{{i.countLinksByIp}}</td>
 
-                        </div>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        </md-whiteframe>
                     </md-content>
                 </md-tab>
 
