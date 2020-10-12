@@ -90,16 +90,16 @@ public class LinkValidatorService {
         }
 
 
-//         LinkTracker linkTracker = new LinkTracker(country, city, 1);
-//         if (isPresentInRepo(city)) {
-//             LinkTracker getOneLink = linkTrackerRepository.findByCity(city);
-//             getOneLink.setCountLinksByIp(getOneLink.getCountLinksByIp() + 1);
-//             linkTrackerRepository.save(getOneLink);
+        LinkTracker linkTracker = new LinkTracker(country, city, 0);
+        if (isPresentInRepo(city)) {
+            LinkTracker getOneLink = linkTrackerRepository.findByCity(city);
+            getOneLink.setCountLinksByIp(getOneLink.getCountLinksByIp() + 1);
+            linkTrackerRepository.save(getOneLink);
 
-//         } else {
-//             linkTrackerRepository.save(linkTracker);
+        } else {
+            linkTrackerRepository.save(linkTracker);
 
-//         }
+        }
     }
 
     public boolean isPresentInRepo(String city) {
