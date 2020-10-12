@@ -4,7 +4,6 @@ import com.example.demo.entity.Link;
 import com.example.demo.entity.LinkTracker;
 import com.example.demo.entity.Stats;
 import com.example.demo.repository.LinkStatsRepo;
-import com.example.demo.repository.LinkTrackerRepository;
 import com.example.demo.service.*;
 import com.example.demo.repository.LinkRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +74,7 @@ public class ListRestController {
             st.setCountAllLinks(linkStatsService.countAllLinks());
             linkStatsRepo.save(st);
         } else {
-            Stats stats = new Stats(0L, 0L);
+            Stats stats = new Stats(1L,0L, 0L);
             linkStatsRepo.save(stats);
         }
         return linkStatsRepo.findById(1L).get();

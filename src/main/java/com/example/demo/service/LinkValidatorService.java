@@ -40,7 +40,6 @@ public class LinkValidatorService {
                 .getRemoteAddr();
     }
 
-    @Transactional
     public void makeNewLink(Link link) {
 
 
@@ -90,7 +89,7 @@ public class LinkValidatorService {
         }
 
 
-        LinkTracker linkTracker = new LinkTracker(country, city, 1);
+        LinkTracker linkTracker = new LinkTracker(country, city, 0);
         if (isPresentInRepo(city)) {
             LinkTracker getOneLink = linkTrackerRepository.findByCity(city);
             getOneLink.setCountLinksByIp(getOneLink.getCountLinksByIp() + 1);
@@ -100,6 +99,7 @@ public class LinkValidatorService {
             linkTrackerRepository.save(linkTracker);
 
         }
+
     }
 
     public boolean isPresentInRepo(String city) {

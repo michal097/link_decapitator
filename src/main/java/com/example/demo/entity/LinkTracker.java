@@ -1,13 +1,12 @@
 package com.example.demo.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import lombok.Data;
 import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "link_tracker")
+@Table(name = "link_tracker_table")
 public class LinkTracker {
 
 
@@ -30,6 +29,5 @@ public class LinkTracker {
     }
 
     public LinkTracker() {
-
     }
 }
