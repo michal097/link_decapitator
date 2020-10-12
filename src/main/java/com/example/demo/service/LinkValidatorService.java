@@ -75,31 +75,31 @@ public class LinkValidatorService {
 
     public void makeLinkTracker(String ip) {
 
-        String ipAPI = "http://ip-api.com/json/";
-        String country;
-        String city;
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject = new JSONObject(IOUtils.toString(new URL(ipAPI + ip), StandardCharsets.UTF_8));
-            country = jsonObject.getString("country");
-            city = jsonObject.getString("city");
-        } catch (Exception e) {
-            System.out.println("status: " + jsonObject.getString("status"));
-            country = "other";
-            city = "other";
-        }
+//         String ipAPI = "http://ip-api.com/json/";
+//         String country;
+//         String city;
+//         JSONObject jsonObject = new JSONObject();
+//         try {
+//             jsonObject = new JSONObject(IOUtils.toString(new URL(ipAPI + ip), StandardCharsets.UTF_8));
+//             country = jsonObject.getString("country");
+//             city = jsonObject.getString("city");
+//         } catch (Exception e) {
+//             System.out.println("status: " + jsonObject.getString("status"));
+//             country = "other";
+//             city = "other";
+//         }
 
 
-        LinkTracker linkTracker = new LinkTracker(country, city, 1);
-        if (isPresentInRepo(city)) {
-            LinkTracker getOneLink = linkTrackerRepository.findByCity(city);
-            getOneLink.setCountLinksByIp(getOneLink.getCountLinksByIp() + 1);
-            linkTrackerRepository.save(getOneLink);
+//         LinkTracker linkTracker = new LinkTracker(country, city, 1);
+//         if (isPresentInRepo(city)) {
+//             LinkTracker getOneLink = linkTrackerRepository.findByCity(city);
+//             getOneLink.setCountLinksByIp(getOneLink.getCountLinksByIp() + 1);
+//             linkTrackerRepository.save(getOneLink);
 
-        } else {
-            linkTrackerRepository.save(linkTracker);
+//         } else {
+//             linkTrackerRepository.save(linkTracker);
 
-        }
+//         }
     }
 
     public boolean isPresentInRepo(String city) {
