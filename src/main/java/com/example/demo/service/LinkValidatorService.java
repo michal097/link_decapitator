@@ -97,7 +97,7 @@ public class LinkValidatorService {
    //         linkTrackerRepository.save(getOneLink);
 
         } else {
-    //        linkTrackerRepository.save(linkTracker);
+            linkTrackerRepository.save(linkTracker);
 
         }
     }
