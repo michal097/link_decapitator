@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Link;
+import com.example.demo.entity.LinkTracker;
 import com.example.demo.repository.LinkRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ public class PageableService {
 
     private final LinkRepo linkRepo;
     private final LinkValidatorService linkValidatorService;
+
 
     @Autowired
     PageableService(LinkRepo linkRepo,
@@ -37,17 +39,17 @@ public class PageableService {
         }
         else return new ArrayList<>();
     }
-//    public List<LinkTracker> linkTrackerList(Integer pageNumber, Integer pageSize){
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize,Sort.by("country").ascending());
-//        Page<LinkTracker> myPage = linkTrackerRepository.findAll(pageable);
-//
-//        if(myPage.hasContent()){
-//            return myPage.getContent();
-//        }
-//        else
-//            return new ArrayList<>();
-//    }
-//
+    public List<LinkTracker> linkTrackerList(Integer pageNumber, Integer pageSize){
+        Pageable pageable = PageRequest.of(pageNumber, pageSize,Sort.by("country").ascending());
+       // Page<LinkTracker> myPage = linkTrackerRepository.findAll(pageable);
+
+      //  if(myPage.hasContent()){
+       //     return myPage.getContent();
+     //   }
+     //   else
+            return new ArrayList<>();
+    }
+
 //    public void saveToLinkTrackerRepo(LinkTracker linkTracker){
 //        linkTrackerRepository.save(linkTracker);
 //    }

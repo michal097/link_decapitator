@@ -9,6 +9,6 @@
 //@Repository
 //public interface LinkTrackerRepository extends PagingAndSortingRepository<LinkTracker, Long> {
 //
-//    Page<LinkTracker> findAll(Pageable pageable);
+//   Page<LinkTracker> findAll(Pageable pageable);
 //
 //}

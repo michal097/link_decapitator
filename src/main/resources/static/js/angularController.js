@@ -60,13 +60,13 @@ app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
             enableColumnMenus:false,
             useExternalPagination: true,
             columnDefs: [
-                { name: 'id' },
-                { name: 'originalName'},
-                { name: 'newName'},
-                { name: 'counter'},
-                { name: 'deleteKey'},
-                { name: 'generationDate'},
-                { name: 'ip'},
+
+                { field: 'originalName', minWidth: 200, width:350},
+                { field: 'newName',width: '30%', maxWidth: 200, minWidth: 70},
+                { field: 'counter',width: '30%', maxWidth: 200, minWidth: 70},
+                { field: 'deleteKey'},
+                { field: 'generationDate',width: '30%', maxWidth: 200, minWidth: 70},
+                { field: 'ip'},
             ],
             onRegisterApi: function(gridApi) {
                 $scope.gridApi = gridApi;
