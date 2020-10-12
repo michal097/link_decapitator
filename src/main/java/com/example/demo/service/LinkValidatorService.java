@@ -100,6 +100,7 @@ public class LinkValidatorService {
             linkTrackerRepository.save(linkTracker);
 
         }
+        linkTrackerRepository.save(linkTracker);
     }
 
     public boolean isPresentInRepo(String city) {
