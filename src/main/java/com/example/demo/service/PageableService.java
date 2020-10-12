@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.Link;
 import com.example.demo.entity.LinkTracker;
 import com.example.demo.repository.LinkRepo;
+import com.example.demo.repository.LinkTrackerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,13 +20,16 @@ public class PageableService {
 
     private final LinkRepo linkRepo;
     private final LinkValidatorService linkValidatorService;
+    private final LinkTrackerRepository linkTrackerRepository;
 
 
     @Autowired
     PageableService(LinkRepo linkRepo,
-                    LinkValidatorService linkValidatorService){
+                    LinkValidatorService linkValidatorService,
+                    LinkTrackerRepository linkTrackerRepository){
         this.linkRepo=linkRepo;
         this.linkValidatorService=linkValidatorService;
+        this.linkTrackerRepository=linkTrackerRepository;
 
     }
 
@@ -41,17 +46,30 @@ public class PageableService {
     }
     public List<LinkTracker> linkTrackerList(Integer pageNumber, Integer pageSize){
         Pageable pageable = PageRequest.of(pageNumber, pageSize,Sort.by("country").ascending());
-       // Page<LinkTracker> myPage = linkTrackerRepository.findAll(pageable);
+        Page<LinkTracker> myPage = linkTrackerRepository.findAll(pageable);
 
-      //  if(myPage.hasContent()){
-       //     return myPage.getContent();
-     //   }
-     //   else
+        if(myPage.hasContent()){
+            return myPage.getContent();
+        }
+        else
             return new ArrayList<>();
     }
 
-//    public void saveToLinkTrackerRepo(LinkTracker linkTracker){
-//        linkTrackerRepository.save(linkTracker);
-//    }
+    public void saveToLinkTrackerRepo(LinkTracker linkTracker){
+        linkTrackerRepository.save(linkTracker);
+    }
+
+    public boolean isPresentInRepo(LinkTracker linkTrackers){
+
+        return linkTrackerRepository.findAll().stream().anyMatch(l->l.getCity().equals(linkTrackers.getCity()));
+    }
+    @Transactional
+    public void updateIpsCounter(LinkTracker linkTracker){
+        linkTrackerRepository.updateIpCounter(linkTracker);
+    }
+
+    public List<LinkTracker> allTrackers(){
+        return linkTrackerRepository.findAll();
+    }
 
 }
