@@ -87,25 +87,25 @@ app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
         $scope.deleteUser = function () {
             UserCRUDService.deleteUser($scope.link)
                 .then(function error(response) {
-                    if (response.status !== 200) {
-                        $scope.errorMessage = response.data.message;
-                        $scope.link.deleteKey = ' ';
-                        $scope.getAllLinks();
-                        $scope.checkIP();
-                        $scope.getCount();
-                        $scope.errorMessage = true;
-                        $scope.message = 'Failed to delete link'
-                    } else {
+                        if (response.status !== 200) {
+                            $scope.errorMessage = response.data.message;
+                            $scope.link.deleteKey = ' ';
+                            $scope.getAllLinks();
+                            $scope.checkIP();
+                            $scope.getCount();
+                            $scope.errorMessage = true;
+                            $scope.message = 'Failed to delete link'
+                        } else {
 
-                        $scope.link.deleteKey = ' ';
-                        $scope.getAllLinks();
-                        $scope.checkIP();
-                        $scope.getCount();
-                        $scope.message = 'Link has been deleted!';
-                        $scope.errorMessage = false;
+                            $scope.link.deleteKey = ' ';
+                            $scope.getAllLinks();
+                            $scope.checkIP();
+                            $scope.getCount();
+                            $scope.message = 'Link has been deleted!';
+                            $scope.errorMessage = false;
+                        }
+
                     }
-
-                }
                 );
         }
 

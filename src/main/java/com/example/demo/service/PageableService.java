@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,50 +25,31 @@ public class PageableService {
     @Autowired
     PageableService(LinkRepo linkRepo,
                     LinkValidatorService linkValidatorService,
-                    LinkTrackerRepository linkTrackerRepository){
-        this.linkRepo=linkRepo;
-        this.linkValidatorService=linkValidatorService;
-        this.linkTrackerRepository=linkTrackerRepository;
+                    LinkTrackerRepository linkTrackerRepository) {
+        this.linkRepo = linkRepo;
+        this.linkValidatorService = linkValidatorService;
+        this.linkTrackerRepository = linkTrackerRepository;
 
     }
 
-    public List<Link> getAllLinksWithPagination(Integer pageNumber, Integer pageSize, String sort){
+    public List<Link> getAllLinksWithPagination(Integer pageNumber, Integer pageSize, String sort) {
 
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sort).descending());
         Page<Link> page = linkRepo.findAllByIp(linkValidatorService.getActualIP(), pageable);
 
-        if(page.hasContent()){
+        if (page.hasContent()) {
             return page.getContent();
-        }
-        else return new ArrayList<>();
+        } else return new ArrayList<>();
     }
-    public List<LinkTracker> linkTrackerList(Integer pageNumber, Integer pageSize){
-        Pageable pageable = PageRequest.of(pageNumber, pageSize,Sort.by("country").ascending());
+
+    public List<LinkTracker> linkTrackerList(Integer pageNumber, Integer pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sort).ascending());
         Page<LinkTracker> myPage = linkTrackerRepository.findAll(pageable);
 
-        if(myPage.hasContent()){
+        if (myPage.hasContent()) {
             return myPage.getContent();
-        }
-        else
+        } else
             return new ArrayList<>();
     }
-
-    public void saveToLinkTrackerRepo(LinkTracker linkTracker){
-        linkTrackerRepository.save(linkTracker);
-    }
-
-    public boolean isPresentInRepo(LinkTracker linkTrackers){
-
-        return linkTrackerRepository.findAll().stream().anyMatch(l->l.getCity().equals(linkTrackers.getCity()));
-    }
-    @Transactional
-    public void updateIpsCounter(LinkTracker linkTracker){
-        linkTrackerRepository.updateIpCounter(linkTracker);
-    }
-
-    public List<LinkTracker> allTrackers(){
-        return linkTrackerRepository.findAll();
-    }
-
 }

@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Link;
+import com.example.demo.entity.Stats;
+import com.example.demo.repository.LinkStatsRepo;
 import com.example.demo.service.LinkValidatorService;
 import com.example.demo.repository.LinkRepo;
 import com.example.demo.service.ReadWriteCSVService;
@@ -24,12 +26,14 @@ public class LinkController {
     private final LinkRepo linkRepo;
     private final LinkValidatorService linkValidatorService;
     private final ReadWriteCSVService readWriteCSVService;
+    private final LinkStatsRepo linkStatsRepo;
 
     @Autowired
-    LinkController(LinkRepo linkRepo, LinkValidatorService linkValidatorService, ReadWriteCSVService readWriteCSVService) {
+    LinkController(LinkRepo linkRepo, LinkValidatorService linkValidatorService, ReadWriteCSVService readWriteCSVService, LinkStatsRepo linkStatsRepo) {
         this.linkRepo = linkRepo;
         this.linkValidatorService = linkValidatorService;
-        this.readWriteCSVService=readWriteCSVService;
+        this.readWriteCSVService = readWriteCSVService;
+        this.linkStatsRepo = linkStatsRepo;
     }
 
     @GetMapping("/")
@@ -42,8 +46,6 @@ public class LinkController {
     @PostMapping("/save")
     public String saveAndMakeMagic(@ModelAttribute Link link, RedirectAttributes redirectAttributes) {
 
-        linkValidatorService.makeNewLink(link);
-
         if (link.getOriginalName().trim().equals("http://")) {
             redirectAttributes.addFlashAttribute("err", "ENTER SOME URL!!!");
             return "redirect:/";
@@ -51,6 +53,7 @@ public class LinkController {
             redirectAttributes.addFlashAttribute("err", "Entered URL is invalid");
             return "redirect:/";
         } else {
+            linkValidatorService.makeNewLink(link);
             linkRepo.save(link);
             redirectAttributes.addFlashAttribute("mess", "s91.herokuapp.com/" + link.getNewName());
         }
@@ -68,6 +71,9 @@ public class LinkController {
 
             url = optLink.get().getOriginalName();
             linkRepo.increase(optLink.get().getId());
+            Stats s = linkStatsRepo.findById(1L).get();
+            s.setRedirectedLinksCounter(s.getRedirectedLinksCounter() + 1);
+            linkStatsRepo.save(s);
         } else {
             url = "";
         }
@@ -80,38 +86,38 @@ public class LinkController {
     public String saveMultiLinks(@RequestParam("file") MultipartFile file,
                                  RedirectAttributes redirectAttributes) {
 
-        try{
-            if(!Objects.requireNonNull(file.getOriginalFilename()).endsWith(".csv"))
+        try {
+            if (!Objects.requireNonNull(file.getOriginalFilename()).endsWith(".csv"))
                 throw new NamingException();
             readWriteCSVService.uploadFile(file);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("uplErr", "Invalid file structure");
             return "redirect:/";
 
         }
 
-           try {
-               List<String> urls = readWriteCSVService.multiUrls(file);
+        try {
+            List<String> urls = readWriteCSVService.multiUrls(file);
 
-               for(String s: urls){
+            for (String s : urls) {
 
-                   String str =  s.startsWith("http://")?s.trim():"http://"+s.trim();
+                String str = s.startsWith("http://") ? s.trim() : "http://" + s.trim();
 
-               if (linkValidatorService.checkValid(str)) {
-                   Link link = new Link();
-                   link.setOriginalName(str);
-                   linkValidatorService.makeNewLink(link);
-                   linkRepo.save(link);
-               }
+                if (linkValidatorService.checkValid(str)) {
+                    Link link = new Link();
+                    link.setOriginalName(str);
+                    linkValidatorService.makeNewLink(link);
+                    linkRepo.save(link);
+                }
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("uplErr", "Bad URL's structure");
+            return "redirect:/";
         }
-           }catch (Exception e){
-               e.printStackTrace();
-               redirectAttributes.addFlashAttribute("uplErr", "Bad URL's structure");
-               return "redirect:/";
-           }
 
         redirectAttributes.addFlashAttribute("uplSucc", "URL's has been decapitated successfully!");
         return "redirect:/";

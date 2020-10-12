@@ -27,9 +27,9 @@ public class ReadWriteCSVService {
     private final LinkValidatorService linkValidatorService;
 
     @Autowired
-    ReadWriteCSVService(LinkRepo linkRepo, LinkValidatorService linkValidatorService){
-        this.linkRepo=linkRepo;
-        this.linkValidatorService=linkValidatorService;
+    ReadWriteCSVService(LinkRepo linkRepo, LinkValidatorService linkValidatorService) {
+        this.linkRepo = linkRepo;
+        this.linkValidatorService = linkValidatorService;
     }
 
     private String str(MultipartFile file) {
@@ -41,15 +41,15 @@ public class ReadWriteCSVService {
         return Files.lines(Paths.get(str(file))).collect(Collectors.toList());
     }
 
-    public void uploadFile(MultipartFile multipartFile) throws Exception{
+    public void uploadFile(MultipartFile multipartFile) throws Exception {
 
         Path copyLocation = Paths.get(str(multipartFile));
         Files.copy(multipartFile.getInputStream(), copyLocation, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    public void makeAndWriteToCSV()  {
+    public void makeAndWriteToCSV() {
         List<Link> links = linkRepo.findAllByIp(linkValidatorService.getActualIP());
-        try(FileWriter fileWriter = new FileWriter(PATH)){
+        try (FileWriter fileWriter = new FileWriter(PATH)) {
             fileWriter.append("Original name");
             fileWriter.append(",");
             fileWriter.append("New name");
@@ -57,7 +57,7 @@ public class ReadWriteCSVService {
             fileWriter.append("Redirected counter");
             fileWriter.append('\n');
 
-            for(Link l: links){
+            for (Link l : links) {
                 fileWriter.append(l.getOriginalName());
                 fileWriter.append(",");
                 fileWriter.append(l.getNewName());
@@ -65,7 +65,7 @@ public class ReadWriteCSVService {
                 fileWriter.append(String.valueOf(l.getCounter()));
                 fileWriter.append('\n');
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

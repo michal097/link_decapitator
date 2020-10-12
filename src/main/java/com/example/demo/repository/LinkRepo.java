@@ -23,7 +23,9 @@ public interface LinkRepo extends PagingAndSortingRepository<Link, Long> {
     void increase(@Param("id") Long id);
 
     List<Link> findAllByIp(String ip);
+
     Page<Link> findAllByIp(String ip, Pageable pageable);
+
     List<Link> findAll();
 
     void deleteByDeleteKey(String deleteKey);

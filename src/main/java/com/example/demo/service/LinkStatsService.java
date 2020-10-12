@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Link;
-import com.example.demo.repository.LinkRepo;
+import com.example.demo.entity.LinkTracker;
+import com.example.demo.repository.LinkTrackerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,24 +9,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class LinkStatsService {
 
-    private final LinkRepo linkRepo;
+
+    private final LinkTrackerRepository linkTrackerRepository;
 
     @Autowired
-    LinkStatsService(LinkRepo linkRepo) {
-        this.linkRepo = linkRepo;
-    }
+    LinkStatsService(LinkTrackerRepository linkTrackerRepository) {
 
-    public long countAllRedirectedURLs() {
-        return linkRepo.findAll()
-                .stream()
-                .map(Link::getCounter)
-                .reduce(Integer::sum)
-                .orElse(0);
-
+        this.linkTrackerRepository = linkTrackerRepository;
     }
 
     public long countAllLinks() {
-        return linkRepo.findAll().size();
+
+        return linkTrackerRepository.findAll()
+                .stream()
+                .map(LinkTracker::getCountLinksByIp)
+                .reduce(Integer::sum)
+                .orElse(0);
     }
 
 }

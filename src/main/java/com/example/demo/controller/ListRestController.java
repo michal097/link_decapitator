@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.entity.Link;
 import com.example.demo.entity.LinkTracker;
 import com.example.demo.entity.Stats;
+import com.example.demo.repository.LinkStatsRepo;
+import com.example.demo.repository.LinkTrackerRepository;
 import com.example.demo.service.*;
 import com.example.demo.repository.LinkRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,28 +28,25 @@ public class ListRestController {
     private final LinkRepo linkRepo;
     private final LinkValidatorService linkValidatorService;
     private final LinkStatsService linkStatsService;
-    private final CheckIPService checkIPService;
     private final PageableService pageableService;
     private final ReadWriteCSVService readWriteCSVService;
-
+    private final LinkStatsRepo linkStatsRepo;
 
     @Autowired
     public ListRestController(LinkRepo linkRepo,
                               LinkValidatorService linkValidatorService,
                               LinkStatsService linkStatsService,
-                              CheckIPService checkIPService,
                               PageableService pageableService,
-                              ReadWriteCSVService readWriteCSVService
+                              ReadWriteCSVService readWriteCSVService,
+                              LinkStatsRepo linkStatsRepo
     ) {
 
         this.linkRepo = linkRepo;
         this.linkValidatorService = linkValidatorService;
         this.linkStatsService = linkStatsService;
-        this.checkIPService = checkIPService;
         this.pageableService = pageableService;
         this.readWriteCSVService = readWriteCSVService;
-
-
+        this.linkStatsRepo = linkStatsRepo;
     }
 
 
@@ -70,66 +69,36 @@ public class ListRestController {
 
     @GetMapping("countAllUrls")
     public Stats countLinks() {
-        return new Stats(linkStatsService.countAllLinks(),
-                linkStatsService.countAllRedirectedURLs());
-    }
 
-  //  REST PAGINATION FOR IP CHECKER IN PROGRESS
-
-//    @GetMapping("checkIP")
-//    public ResponseEntity<List<LinkTracker>> stats(
-//            @RequestParam(defaultValue = "0") Integer pageNumber,
-//            @RequestParam(defaultValue = "5") Integer pageSize
-//    ) throws IOException {
-//        final String ipAPI = "http://ip-api.com/json/";
-//        Map<String, Long> links = checkIPService.linkTracker(ipAPI);
-//
-//        for (Map.Entry<String, Long> map : links.entrySet()) {
-//            String[] str = map.getKey().split(",");
-//            LinkTracker linkTracker = new LinkTracker(str[0], str[1], map.getValue());
-//
-//            if(pageableService.isPresentInRepo(linkTracker)){
-//                pageableService.updateIpsCounter(linkTracker);
-//            }
-//            else
-//            pageableService.saveToLinkTrackerRepo(linkTracker);
-//        }
-//
-//        List<LinkTracker> linkTracker = pageableService.linkTrackerList(pageNumber,pageSize);
-//
-//        return new ResponseEntity<>(linkTracker,new HttpHeaders(),HttpStatus.OK);
-//    }
-    @GetMapping("checkIP")
-    public List<LinkTracker> stats() throws IOException {
-        final String ipAPI = "http://ip-api.com/json/";
-        Map<String, Long> links = checkIPService.linkTracker(ipAPI);
-
-        for (Map.Entry<String, Long> map : links.entrySet()) {
-            String[] str = map.getKey().split(",");
-            LinkTracker linkTracker = new LinkTracker(str[0], str[1], map.getValue());
-
-            if(pageableService.isPresentInRepo(linkTracker)){
-                pageableService.updateIpsCounter(linkTracker);
-            }
-            else
-                pageableService.saveToLinkTrackerRepo(linkTracker);
+        if (linkStatsRepo.findById(1L).isPresent()) {
+            Stats st = linkStatsRepo.findById(1L).get();
+            st.setCountAllLinks(linkStatsService.countAllLinks());
+            linkStatsRepo.save(st);
+        } else {
+            Stats stats = new Stats(0L, 0L);
+            linkStatsRepo.save(stats);
         }
-
-        return pageableService.allTrackers();
+        return linkStatsRepo.findById(1L).get();
     }
-//    @GetMapping("checkIP")
-//    public List<LinkTracker> stats() throws IOException {
-//        final String ipAPI = "http://ip-api.com/json/";
-//        Map<String, Long> links = checkIPService.linkTracker(ipAPI);
-//        List<LinkTracker> linkTrackers = new ArrayList<>();
-//
-//        for (Map.Entry<String, Long> map : links.entrySet()) {
-//            String[] str = map.getKey().split(",");
-//            linkTrackers.add(new LinkTracker(str[0], str[1], map.getValue()));
-//        }
-//        linkTrackers.sort(Comparator.comparing(LinkTracker::getCountry));
-//        return linkTrackers;
-//    }
+
+
+    @GetMapping("/checkIP")
+    public ResponseEntity<List<LinkTracker>> stats(
+            @RequestParam(defaultValue = "0") Integer pageNumber,
+            @RequestParam(defaultValue = "5") Integer pageSize,
+            @RequestParam(defaultValue = "country") String country
+    ) {
+
+        List<LinkTracker> linkTracker = pageableService.linkTrackerList(pageNumber, pageSize, country);
+
+        return new ResponseEntity<>(linkTracker, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("tracker")
+    public List<LinkTracker> tra(){
+        return pageableService.linkTrackerList(1,1,"country");
+    }
+
 
     @GetMapping("/allUrls")
     public ResponseEntity<List<Link>> pagedLinks(
