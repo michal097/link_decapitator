@@ -90,7 +90,7 @@ public class LinkValidatorService {
         }
 
 
-   //     LinkTracker linkTracker = new LinkTracker(country, city, 0);
+        LinkTracker linkTracker = new LinkTracker(country, city, 0);
         if (isPresentInRepo(city)) {
             LinkTracker getOneLink = linkTrackerRepository.findByCity(city);
             getOneLink.setCountLinksByIp(getOneLink.getCountLinksByIp() + 1);
