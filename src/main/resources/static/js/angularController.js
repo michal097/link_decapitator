@@ -17,6 +17,15 @@ app.service('UserCRUDService', ['$http', function ($http) {
 
     }
 
+    this.getPaginationIP = function getPaginationIP(pageNumber, pageSize) {
+        pageNumber = pageNumber > 0 ? pageNumber - 1 : 0;
+        return $http({
+            method: 'GET',
+            url: 'checkIP/?pageSize=' + pageSize + '&pageNumber=' + pageNumber
+        });
+
+    }
+
 
     this.getCount = function getCount() {
         return $http({
@@ -37,6 +46,8 @@ app.service('UserCRUDService', ['$http', function ($http) {
             url: 'delete/' + link.deleteKey
         });
     }
+
+
 }]);
 
 app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
@@ -45,11 +56,17 @@ app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
 
         $scope.submitted = false;
 
-        var paginationOptions = {
+
+//============check IP ====================
+
+//============check IP ====================
+
+        const paginationOptions = {
             pageNumber: 1,
             pageSize: 5,
             sort: null
         };
+
         UserCRUDService.getPagination(paginationOptions.pageNumber,paginationOptions.pageSize).success(function (data){
             $scope.gridOptions.data = data;
             $scope.gridOptions.totalItems = data.totalElements;

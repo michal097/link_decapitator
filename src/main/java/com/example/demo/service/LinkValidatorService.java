@@ -47,12 +47,6 @@ public class LinkValidatorService {
                 .toString()
                 .replaceAll("-", "");
 
-        String validatorHTTPS = link.getOriginalName()
-                .startsWith("http")
-                ? link.getOriginalName()
-                : "http://" + link.getOriginalName();
-
-        link.setOriginalName(validatorHTTPS.trim());
         link.setNewName(randomlyChangeCase(uniqueString).substring(0, 6));
         link.setDeleteKey(randomlyChangeCase(uniqueString).substring(28));
         link.setIp(getActualIP());
@@ -99,7 +93,6 @@ public class LinkValidatorService {
             linkTrackerRepository.save(linkTracker);
 
         }
-
     }
 
     public boolean isPresentInRepo(String city) {

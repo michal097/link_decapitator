@@ -19,8 +19,4 @@ public class Stats {
     private long countAllLinks;
     private long redirectedLinksCounter;
 
-    public Stats(long countAllLinks, long redirectedLinksCounter) {
-        this.countAllLinks = countAllLinks;
-        this.redirectedLinksCounter = redirectedLinksCounter;
-    }
 }

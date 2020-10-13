@@ -45,8 +45,12 @@ public class LinkController {
 
     @PostMapping("/save")
     public String saveAndMakeMagic(@ModelAttribute Link link, RedirectAttributes redirectAttributes) {
+        //VALIDATOR
+        if (!link.getOriginalName().startsWith("http")) {
+            link.setOriginalName("https://" + link.getOriginalName());
+        }
 
-        if (link.getOriginalName().trim().equals("http://")) {
+        if (link.getOriginalName().trim().equals("https://")) {
             redirectAttributes.addFlashAttribute("err", "ENTER SOME URL!!!");
             return "redirect:/";
         } else if (!linkValidatorService.checkValid(link.getOriginalName())) {
