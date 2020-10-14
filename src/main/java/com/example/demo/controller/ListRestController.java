@@ -66,19 +66,19 @@ public class ListRestController {
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
-    @GetMapping("countAllUrls")
-    public Stats countLinks() {
-
-        if (linkStatsRepo.findById(1L).isPresent()) {
-            Stats st = linkStatsRepo.findById(1L).get();
-            st.setCountAllLinks(linkStatsService.countAllLinks());
-            linkStatsRepo.save(st);
-        } else {
-            Stats stats = new Stats(1L,0L, 0L);
-            linkStatsRepo.save(stats);
-        }
-        return linkStatsRepo.findById(1L).get();
-    }
+//    @GetMapping("countAllUrls")
+//    public Stats countLinks() {
+//
+//        if (linkStatsRepo.findById(1L).isPresent()) {
+//            Stats st = linkStatsRepo.findById(1L).get();
+//            st.setCountAllLinks(linkStatsService.countAllLinks());
+//            linkStatsRepo.save(st);
+//        } else {
+//            Stats stats = new Stats(1L,0L, 0L);
+//            linkStatsRepo.save(stats);
+//        }
+//        return linkStatsRepo.findById(1L).get();
+//    }
 
 
     @GetMapping("/checkIP")
