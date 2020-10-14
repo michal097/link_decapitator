@@ -81,22 +81,18 @@ public class ListRestController {
 //    }
 
 
-    @GetMapping("/checkIP")
-    public ResponseEntity<List<LinkTracker>> stats(
-            @RequestParam(defaultValue = "0") Integer pageNumber,
-            @RequestParam(defaultValue = "5") Integer pageSize,
-            @RequestParam(defaultValue = "country") String country
-    ) {
+//     @GetMapping("/checkIP")
+//     public ResponseEntity<List<LinkTracker>> stats(
+//             @RequestParam(defaultValue = "0") Integer pageNumber,
+//             @RequestParam(defaultValue = "5") Integer pageSize,
+//             @RequestParam(defaultValue = "country") String country
+//     ) {
 
-        List<LinkTracker> linkTracker = pageableService.linkTrackerList(pageNumber, pageSize, country);
+//         List<LinkTracker> linkTracker = pageableService.linkTrackerList(pageNumber, pageSize, country);
 
-        return new ResponseEntity<>(linkTracker, new HttpHeaders(), HttpStatus.OK);
-    }
+//         return new ResponseEntity<>(linkTracker, new HttpHeaders(), HttpStatus.OK);
+//     }
 
-    @GetMapping("tracker")
-    public List<LinkTracker> tra(){
-        return pageableService.linkTrackerList(1,1,"country");
-    }
 
 
     @GetMapping("/allUrls")
