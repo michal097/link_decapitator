@@ -93,11 +93,6 @@ public class ListRestController {
         return new ResponseEntity<>(linkTracker, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("tracker")
-    public List<LinkTracker> tra(){
-        return pageableService.linkTrackerList(1,1,"country");
-    }
-
 
     @GetMapping("/allUrls")
     public ResponseEntity<List<Link>> pagedLinks(
