@@ -97,7 +97,7 @@ public class ListRestController {
     @GetMapping("/allUrls")
     public ResponseEntity<List<Link>> pagedLinks(
             @RequestParam(defaultValue = "0") Integer pageNumber,
-            @RequestParam(defaultValue = "5") Integer pageSize,
+            @RequestParam(defaultValue = "99") Integer pageSize,
             @RequestParam(defaultValue = "generationDate") String data
     ) {
         List<Link> links = pageableService.getAllLinksWithPagination(pageNumber, pageSize, data);
