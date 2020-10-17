@@ -81,23 +81,23 @@ public class ListRestController {
     }
 
 
-    @GetMapping("/checkIP")
-    public ResponseEntity<List<LinkTracker>> stats(
-            @RequestParam(defaultValue = "0") Integer pageNumber,
-            @RequestParam(defaultValue = "5") Integer pageSize,
-            @RequestParam(defaultValue = "country") String country
-    ) {
+     @GetMapping("/checkIP")
+     public ResponseEntity<List<LinkTracker>> stats(
+             @RequestParam(defaultValue = "0") Integer pageNumber,
+             @RequestParam(defaultValue = "99") Integer pageSize,
+             @RequestParam(defaultValue = "country") String country
+     ) {
 
-        List<LinkTracker> linkTracker = pageableService.linkTrackerList(pageNumber, pageSize, country);
+         List<LinkTracker> linkTracker = pageableService.linkTrackerList(pageNumber, pageSize, country);
 
-        return new ResponseEntity<>(linkTracker, new HttpHeaders(), HttpStatus.OK);
-    }
+         return new ResponseEntity<>(linkTracker, new HttpHeaders(), HttpStatus.OK);
+     }
 
 
     @GetMapping("/allUrls")
     public ResponseEntity<List<Link>> pagedLinks(
             @RequestParam(defaultValue = "0") Integer pageNumber,
-            @RequestParam(defaultValue = "99") Integer pageSize,
+            @RequestParam(defaultValue = "5") Integer pageSize,
             @RequestParam(defaultValue = "generationDate") String data
     ) {
         List<Link> links = pageableService.getAllLinksWithPagination(pageNumber, pageSize, data);
