@@ -57,10 +57,6 @@ app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
         $scope.submitted = false;
 
 
-//============check IP ====================
-
-//============check IP ====================
-
         const paginationOptions = {
             pageNumber: 1,
             pageSize: 5,
@@ -78,10 +74,10 @@ app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
             useExternalPagination: true,
             columnDefs: [
 
-                { field: 'originalName', minWidth: 200, width:350},
+                { field: 'originalName', minWidth: 200, width:500},
                 { field: 'newName',width: '30%', maxWidth: 200, minWidth: 70},
                 { field: 'counter',width: '30%', maxWidth: 200, minWidth: 70},
-                { field: 'deleteKey'},
+                { field: 'deleteKey', maxWidth: 50},
                 { field: 'generationDate',width: '30%', maxWidth: 200, minWidth: 70},
                 { field: 'ip'},
             ],

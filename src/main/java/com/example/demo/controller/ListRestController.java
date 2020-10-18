@@ -110,8 +110,8 @@ public class ListRestController {
 
         File file = new File(ReadWriteCSVService.PATH);
 
-        readWriteCSVService.makeAndWriteToCSV();
-
+       // readWriteCSVService.makeAndWriteToCSV();
+        readWriteCSVService.writeDataToExcel();
         InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
         return ResponseEntity.ok()
