@@ -26,6 +26,8 @@
     <script src="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.js"></script>
     <script data-require="bootstrap@3.1.1" data-semver="3.1.1" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js'></script>
+
     <script type="text/javascript" th:src="@{/js/angularController.js}"></script>
     <script type="text/javascript" th:src="@{/js/copy.js}"></script>
     <script type="text/javascript" th:src="@{/js/hideNotifications.js}"></script>
@@ -75,7 +77,9 @@
     }
 
 </script>
-<div class="content" ng-controller="UserCRUDCtrl">
+
+
+<div class="content" ng-controller="UserCRUDCtrl" ng-cloak="">
     <div ng-cloak="" class="tabsdemoDynamicHeight">
         <md-content>
             <md-tabs md-dynamic-height="" md-border-bottom="">
@@ -146,6 +150,16 @@
 
                 <md-tab label="upload multi urls">
                     <md-content class="md-padding">
+
+                        <div ng-controller="AppCtrl"  ng-cloak="">
+
+
+                            <md-button class="md-primary md-raised" ng-click="showAlert($event)">
+                                Tips for upload files
+                            </md-button>
+
+                        </div>
+
                         <div>
                             <form method="POST" th:action="@{/uploadFile}" enctype="multipart/form-data">
 

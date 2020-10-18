@@ -70,11 +70,15 @@ public class ReadWriteCSVService {
 
         Set<String> keySet = data.keySet();
         int rownum = 0;
+
         for(String key: keySet){
             Row row = sheet.createRow(rownum++);
             Object[] objArray = data.get(key);
+
             int cellnum = 0;
+
             for(Object object: objArray){
+
                 Cell cell = row.createCell(cellnum++);
                 if(object instanceof String)
                     cell.setCellValue((String) object);

@@ -1,4 +1,25 @@
-var app = angular.module('app', ['ngMessages','ngMaterial','ui.grid','ui.grid.pagination']);
+var app = angular.module('app', ['ngMessages','ngMaterial','ui.grid','ui.grid.pagination', 'material.svgAssetsCache']);
+
+
+    app.controller('AppCtrl', function($scope, $mdDialog) {
+
+
+        $scope.showAlert = function (ev) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+                    .title('You can upload various types of files')
+                    .textContent('All you need to upload file, you have to specified urls one by one on the separate lines')
+                    .ariaLabel('Alert Dialog Demo')
+                    .ok('Got it!')
+                    .targetEvent(ev)
+            );
+        };
+
+    });
+
+
 app.service('UserCRUDService', ['$http', function ($http) {
 
     this.getAllLinks = function getAllLinks() {
@@ -51,11 +72,23 @@ app.service('UserCRUDService', ['$http', function ($http) {
 }]);
 
 app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
-    function ($scope, UserCRUDService, $http) {
+    function ($scope, UserCRUDService, $http, $mdDialog) {
 
 
         $scope.submitted = false;
 
+        $scope.showAlert = function (ev) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(app.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+                    .title('This is an alert title')
+                    .textContent('You can specify some description text in here.')
+                    .ariaLabel('Alert Dialog Demo')
+                    .ok('Got it!')
+                    .targetEvent(ev)
+            );
+        };
 
         const paginationOptions = {
             pageNumber: 1,
