@@ -9,7 +9,7 @@ var app = angular.module('app', ['ngMessages','ngMaterial','ui.grid','ui.grid.pa
                 $mdDialog.alert()
                     .parent(angular.element(document.querySelector('#popupContainer')))
                     .clickOutsideToClose(true)
-                    .title('You can upload various types of files')
+                    .title('You can upload files with given extensions: csv and txt')
                     .textContent('All you need to upload file, you have to specified urls one by one on the separate lines')
                     .ariaLabel('Alert Dialog Demo')
                     .ok('Got it!')
@@ -76,19 +76,6 @@ app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
 
 
         $scope.submitted = false;
-
-        $scope.showAlert = function (ev) {
-            $mdDialog.show(
-                $mdDialog.alert()
-                    .parent(app.element(document.querySelector('#popupContainer')))
-                    .clickOutsideToClose(true)
-                    .title('This is an alert title')
-                    .textContent('You can specify some description text in here.')
-                    .ariaLabel('Alert Dialog Demo')
-                    .ok('Got it!')
-                    .targetEvent(ev)
-            );
-        };
 
         const paginationOptions = {
             pageNumber: 1,

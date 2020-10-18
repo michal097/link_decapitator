@@ -90,9 +90,13 @@ public class LinkController {
     public String saveMultiLinks(@RequestParam("file") MultipartFile file,
                                  RedirectAttributes redirectAttributes) {
 
+        boolean isCSV = Objects.requireNonNull(file.getOriginalFilename()).endsWith("csv");
+        boolean isTXT = file.getOriginalFilename().endsWith("txt");
+
+        System.out.println("csv: " + isCSV +" txt: "+isTXT);
         try {
-            if (!Objects.requireNonNull(file.getOriginalFilename()).endsWith(".csv"))
-                throw new NamingException();
+            if (!isCSV && !isTXT)
+                throw new Exception();
             readWriteCSVService.uploadFile(file);
 
         } catch (Exception e) {
