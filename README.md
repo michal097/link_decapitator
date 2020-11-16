@@ -22,3 +22,4 @@ Technologies used in the project:
 Database: PostgreSQL 
 
 Application is available at the URL adress: https://s91.herokuapp.com/
+ 
