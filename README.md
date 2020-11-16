@@ -19,6 +19,6 @@ Technologies used in the project:
 -HTML
 -CSS
 
-Database: PostgreSQL
+Database: PostgreSQL 
 
 Application is available at the URL adress: https://s91.herokuapp.com/
