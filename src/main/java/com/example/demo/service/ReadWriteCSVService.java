@@ -51,10 +51,10 @@ public class ReadWriteCSVService {
     }
 
 
-    public void writeDataToExcel(){
+    public void writeDataToExcel() {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet =workbook.createSheet("Links report");
+        XSSFSheet sheet = workbook.createSheet("Links report");
 
         List<Link> links = linkRepo.findAllByIp(linkValidatorService.getActualIP());
 
@@ -63,32 +63,33 @@ public class ReadWriteCSVService {
         Map<String, Object[]> data = new TreeMap<>();
         data.put("1", new Object[]{"Original name", "New name", "Redirected counter"});
 
-        for(Link link: links){
-            data.put(String.valueOf(counter),new Object[]{link.getOriginalName(), "s91.herokuapp.com/"+link.getNewName(),link.getCounter()});
+        for (Link link : links) {
+            data.put(String.valueOf(counter),
+                    new Object[]{link.getOriginalName(), "s91.herokuapp.com/" + link.getNewName(), link.getCounter()});
             counter++;
         }
 
         Set<String> keySet = data.keySet();
         int rownum = 0;
 
-        for(String key: keySet){
+        for (String key : keySet) {
             Row row = sheet.createRow(rownum++);
             Object[] objArray = data.get(key);
 
             int cellnum = 0;
 
-            for(Object object: objArray){
+            for (Object object : objArray) {
 
                 Cell cell = row.createCell(cellnum++);
-                if(object instanceof String)
+                if (object instanceof String)
                     cell.setCellValue((String) object);
-                else if(object instanceof Integer)
+                else if (object instanceof Integer)
                     cell.setCellValue((Integer) object);
             }
         }
-        try(FileOutputStream fileOutputStream = new FileOutputStream(new File(PATH))){
+        try (FileOutputStream fileOutputStream = new FileOutputStream(new File(PATH))) {
             workbook.write(fileOutputStream);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.Link;
 import com.example.demo.entity.LinkTracker;
 import com.example.demo.repository.LinkTrackerRepository;
+import lombok.NoArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.validator.UrlValidator;
 import org.json.JSONObject;
@@ -18,11 +19,12 @@ import java.util.stream.Collectors;
 
 
 @Service
+@NoArgsConstructor
 public class LinkValidatorService {
 
     private final UrlValidator urlValidator = new UrlValidator();
 
-    private final LinkTrackerRepository linkTrackerRepository;
+    private LinkTrackerRepository linkTrackerRepository;
 
     @Autowired
     public LinkValidatorService(LinkTrackerRepository linkTrackerRepository) {

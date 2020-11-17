@@ -6,6 +6,7 @@ import com.example.demo.entity.Stats;
 import com.example.demo.repository.LinkStatsRepo;
 import com.example.demo.service.*;
 import com.example.demo.repository.LinkRepo;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,8 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.util.*;
 
 
@@ -74,24 +77,24 @@ public class ListRestController {
             st.setCountAllLinks(linkStatsService.countAllLinks());
             linkStatsRepo.save(st);
         } else {
-            Stats stats = new Stats(1L,0L, 0L);
+            Stats stats = new Stats(1L, 0L, 0L);
             linkStatsRepo.save(stats);
         }
         return linkStatsRepo.findById(1L).get();
     }
 
 
-     @GetMapping("/checkIP")
-     public ResponseEntity<List<LinkTracker>> stats(
-             @RequestParam(defaultValue = "0") Integer pageNumber,
-             @RequestParam(defaultValue = "99") Integer pageSize,
-             @RequestParam(defaultValue = "country") String country
-     ) {
+    @GetMapping("/checkIP")
+    public ResponseEntity<List<LinkTracker>> stats(
+            @RequestParam(defaultValue = "0") Integer pageNumber,
+            @RequestParam(defaultValue = "99") Integer pageSize,
+            @RequestParam(defaultValue = "country") String country
+    ) {
 
-         List<LinkTracker> linkTracker = pageableService.linkTrackerList(pageNumber, pageSize, country);
+        List<LinkTracker> linkTracker = pageableService.linkTrackerList(pageNumber, pageSize, country);
 
-         return new ResponseEntity<>(linkTracker, new HttpHeaders(), HttpStatus.OK);
-     }
+        return new ResponseEntity<>(linkTracker, new HttpHeaders(), HttpStatus.OK);
+    }
 
 
     @GetMapping("/allUrls")
@@ -118,6 +121,20 @@ public class ListRestController {
                         "attachment;filename=" + file.getName())
                 .contentType(MediaType.APPLICATION_PDF).contentLength(file.length())
                 .body(resource);
+    }
+
+    @GetMapping("/checkSpecs")
+    public String checkSpec() {
+        RuntimeMXBean run = ManagementFactory.getRuntimeMXBean();
+        Map<String, String> systemProps = run.getSystemProperties();
+        Set<String> set = systemProps.keySet();
+        var lsita = new ArrayList<String>();
+
+        for (String l : set) {
+            lsita.add(systemProps.get(l));
+        }
+
+        return lsita.toString();
     }
 }
 

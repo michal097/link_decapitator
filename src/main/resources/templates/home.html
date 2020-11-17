@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Link decapitator</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -24,7 +24,8 @@
     <script src="http://ui-grid.info/docs/grunt-scripts/jszip.min.js"></script>
     <script src="http://ui-grid.info/docs/grunt-scripts/excel-builder.dist.js"></script>
     <script src="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.js"></script>
-    <script data-require="bootstrap@3.1.1" data-semver="3.1.1" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script data-require="bootstrap@3.1.1" data-semver="3.1.1"
+            src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js'></script>
 
@@ -41,7 +42,8 @@
 <form th:action="@{/save}" th:object="${link}" method="post">
     <h1> Enter your URL to shorten</h1>
     <div class="linkInput">
-        <input type="text" placeholder="enter some url adress" style="color: dimgrey; font-size: 20px;" th:field="*{originalName}" />
+        <input type="text" placeholder="enter some url adress" style="color: dimgrey; font-size: 20px;"
+               th:field="*{originalName}"/>
     </div>
     <button class="button" type="submit" value="SHORT!!!">Get short link</button>
 </form>
@@ -65,13 +67,13 @@
 
 <script>
     function hide() {
-        setTimeout(function() {
+        setTimeout(function () {
             document.getElementById('inform').classList.add('hidden');
         }, 5000)
     }
 
     function hide1() {
-        setTimeout(function() {
+        setTimeout(function () {
             document.getElementById('inform1').classList.add('hidden');
         }, 5000)
     }
@@ -86,12 +88,16 @@
                 <md-tab label="Show statiscics">
                     <md-content class="md-padding">
 
-                        <md-whiteframe id="stats1"class="md-whiteframe-6dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout layout-align="center center">
+                        <md-whiteframe id="stats1" class="md-whiteframe-6dp" flex-sm="45" flex-gt-sm="35"
+                                       flex-gt-md="25" layout layout-align="center center">
 
-                            <p style="font-size: 20px"><strong>All created links </strong><br>{{stats.countAllLinks}}</p>
+                            <p style="font-size: 20px"><strong>All created links </strong><br>{{stats.countAllLinks}}
+                            </p>
                         </md-whiteframe>
-                        <md-whiteframe id="stats2" class="md-whiteframe-6dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout layout-align="center center">
-                            <p style="font-size: 20px"><strong>Counter redirected links </strong><br>{{stats.redirectedLinksCounter}}</p>
+                        <md-whiteframe id="stats2" class="md-whiteframe-6dp" flex-sm="45" flex-gt-sm="35"
+                                       flex-gt-md="25" layout layout-align="center center">
+                            <p style="font-size: 20px"><strong>Counter redirected
+                                links </strong><br>{{stats.redirectedLinksCounter}}</p>
                         </md-whiteframe>
 
                         <table>
@@ -120,7 +126,8 @@
                     <md-content class="md-padding">
                         <div>
                             <md-button ng-href="/downloadText" class="md-raised"> Download report</md-button>
-                            <div ui-grid="gridOptions" class="grid" ui-grid-pagination ui-grid-resize-columns  ui-grid-move-columns></div>
+                            <div ui-grid="gridOptions" class="grid" ui-grid-pagination ui-grid-resize-columns
+                                 ui-grid-move-columns></div>
 
                         </div>
 
@@ -133,8 +140,11 @@
                             <div>
                                 <md-input-container flex="50">
                                     <label>Delete link - enter delete key</label>
-                                    <input class="delete_input" type="text" required="" name="delete" ng-model="link.deleteKey">
-                                    <button class="button_delete" ng-click="deleteUser(link.deleteKey)"> Delete chosen link</button>
+                                    <input class="delete_input" type="text" required="" name="delete"
+                                           ng-model="link.deleteKey">
+                                    <button class="button_delete" ng-click="deleteUser(link.deleteKey)"> Delete chosen
+                                        link
+                                    </button>
                                     <div ng-messages="projectForm.link.deleteKey.$error">
                                         <div ng-message="required">Delete key is required</div>
                                     </div>
@@ -151,7 +161,7 @@
                 <md-tab label="upload multi urls">
                     <md-content class="md-padding">
 
-                        <div ng-controller="AppCtrl"  ng-cloak="">
+                        <div ng-controller="AppCtrl" ng-cloak="">
 
 
                             <md-button class="md-primary md-raised" ng-click="showAlert($event)">
@@ -166,12 +176,12 @@
                                 <br><br><br>
                                 <div class="downloadArea" id="yourBtn" onclick="getFile()">click to choose a file</div>
                                 <div style='height: 0;width: 0; overflow:hidden;'>
-                                    <input id="upfile" type="file" name="file" value="upload" onchange="sub(this)" />
+                                    <input id="upfile" type="file" name="file" value="upload" onchange="sub(this)"/>
                                 </div>
 
 
                                 <br><br>
-                                <button class="button_accept_file" type="submit">Submit </button>
+                                <button class="button_accept_file" type="submit">Submit</button>
 
                                 <script>
                                     function getFile() {

@@ -93,7 +93,7 @@ public class LinkController {
         boolean isCSV = Objects.requireNonNull(file.getOriginalFilename()).endsWith("csv");
         boolean isTXT = file.getOriginalFilename().endsWith("txt");
 
-        System.out.println("csv: " + isCSV +" txt: "+isTXT);
+        System.out.println("csv: " + isCSV + " txt: " + isTXT);
         try {
             if (!isCSV && !isTXT)
                 throw new Exception();

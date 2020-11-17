@@ -212,7 +212,7 @@ th {
     text-shadow: black;
 }
 
-.button_accept_file{
+.button_accept_file {
 
     background-color: #205e60;
     border: none;
@@ -230,11 +230,13 @@ th {
     background-color: #64e7e7;
 }
 
-.hidden{
+.hidden {
     display: none;
 }
+
 .tabsdemoDynamicHeight md-content h1:first-child {
-    margin-top: 0; }
+    margin-top: 0;
+}
 
 #yourBtn {
     font-family: calibri, serif;
@@ -248,19 +250,26 @@ th {
     cursor: pointer;
 }
 
-.downloadArea{
-    margin-left:20%;
-    margin-right:20%;
-    width:60%;
+.downloadArea {
+    margin-left: 20%;
+    margin-right: 20%;
+    width: 60%;
     font-size: 17px;
 }
 
-.md-whiteframe-6dp{
+.md-whiteframe-6dp {
 
     margin-top: 5%;
     margin-bottom: 5%;
     width: 400px;
 
 }
-#stats1 {display:inline-block;margin-right:10px;}
-#stats2 {display:inline-block;}
+
+#stats1 {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#stats2 {
+    display: inline-block;
+}

@@ -1,23 +1,22 @@
-var app = angular.module('app', ['ngMessages','ngMaterial','ui.grid','ui.grid.pagination', 'material.svgAssetsCache']);
+var app = angular.module('app', ['ngMessages', 'ngMaterial', 'ui.grid', 'ui.grid.pagination', 'material.svgAssetsCache']);
+
+app.controller('AppCtrl', function ($scope, $mdDialog) {
 
 
-    app.controller('AppCtrl', function($scope, $mdDialog) {
+    $scope.showAlert = function (ev) {
+        $mdDialog.show(
+            $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+                .title('You can upload files with given extensions: csv and txt')
+                .textContent('All you need to upload file, you have to specified urls one by one on the separate lines')
+                .ariaLabel('Alert Dialog Demo')
+                .ok('Got it!')
+                .targetEvent(ev)
+        );
+    };
 
-
-        $scope.showAlert = function (ev) {
-            $mdDialog.show(
-                $mdDialog.alert()
-                    .parent(angular.element(document.querySelector('#popupContainer')))
-                    .clickOutsideToClose(true)
-                    .title('You can upload files with given extensions: csv and txt')
-                    .textContent('All you need to upload file, you have to specified urls one by one on the separate lines')
-                    .ariaLabel('Alert Dialog Demo')
-                    .ok('Got it!')
-                    .targetEvent(ev)
-            );
-        };
-
-    });
+});
 
 
 app.service('UserCRUDService', ['$http', function ($http) {
@@ -74,6 +73,11 @@ app.service('UserCRUDService', ['$http', function ($http) {
 app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
     function ($scope, UserCRUDService, $http, $mdDialog) {
 
+        function TodoCtrl($scope, $resource) {
+            var svc = $resource('http://testv1.cloudapp.net/test.svc/persons');
+            $scope.items = svc.query();
+            $scope.msg = "Hello World";
+        }
 
         $scope.submitted = false;
 
@@ -83,33 +87,33 @@ app.controller('UserCRUDCtrl', ['$scope', 'UserCRUDService',
             sort: null
         };
 
-        UserCRUDService.getPagination(paginationOptions.pageNumber,paginationOptions.pageSize).success(function (data){
+        UserCRUDService.getPagination(paginationOptions.pageNumber, paginationOptions.pageSize).success(function (data) {
             $scope.gridOptions.data = data;
             $scope.gridOptions.totalItems = data.totalElements;
         });
         $scope.gridOptions = {
             paginationPageSizes: [5, 10, 20],
             paginationPageSize: paginationOptions.pageSize,
-            enableColumnMenus:false,
+            enableColumnMenus: false,
             useExternalPagination: true,
             columnDefs: [
 
-                { field: 'originalName', minWidth: 200, width:500},
-                { field: 'newName',width: '30%', maxWidth: 200, minWidth: 70},
-                { field: 'counter',width: '30%', maxWidth: 200, minWidth: 70},
-                { field: 'deleteKey', maxWidth: 50},
-                { field: 'generationDate',width: '30%', maxWidth: 200, minWidth: 70},
-                { field: 'ip'},
+                {field: 'originalName', minWidth: 200, width: 500},
+                {field: 'newName', width: '30%', maxWidth: 200, minWidth: 70},
+                {field: 'counter', width: '30%', maxWidth: 200, minWidth: 70},
+                {field: 'deleteKey', maxWidth: 50},
+                {field: 'generationDate', width: '30%', maxWidth: 200, minWidth: 70},
+                {field: 'ip'},
             ],
-            onRegisterApi: function(gridApi) {
+            onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
                 gridApi.pagination.on.paginationChanged(
                     $scope,
                     function (newPage, pageSize) {
                         paginationOptions.pageNumber = newPage;
                         paginationOptions.pageSize = pageSize;
-                        UserCRUDService.getPagination(newPage,pageSize)
-                            .success(function(data){
+                        UserCRUDService.getPagination(newPage, pageSize)
+                            .success(function (data) {
                                 $scope.gridOptions.data = data;
                                 $scope.gridOptions.totalItems = data.totalElements;
                             });
